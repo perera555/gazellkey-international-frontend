@@ -4,6 +4,8 @@ import EmptyState from "@/components/site/EmptyState";
 import EnquirySection from "@/components/site/EnquirySection";
 import ErrorNote from "@/components/site/ErrorNote";
 import FilterTabs from "@/components/site/FilterTabs";
+import GallerySection from "@/components/site/GallerySection";
+import ReviewsSection from "@/components/site/ReviewsSection";
 import { FlightSearch } from "@/components/site/HeroSearch";
 import ItemCard from "@/components/site/ItemCard";
 import Pagination from "@/components/site/Pagination";
@@ -32,10 +34,15 @@ const SERVICES = [
 
 export default async function TravelPage({ searchParams }: PageProps<"/travel">) {
   const params = await searchParams;
-  const tours = await apiGet<Tour[]>(
-    `/api/travel/tours${toQuery(params, ["tourType", "search", "pageNumber"], { pageSize: "9" })}`,
-  );
-  const filtered = param(params.tourType) || param(params.search);
+  const [tours, countries] = await Promise.all([
+    apiGet<Tour[]>(
+      `/api/travel/tours${toQuery(params, ["tourType", "country", "search", "pageNumber"], { pageSize: "9", status: "PUBLISHED" })}`,
+    ),
+    apiGet<string[]>("/api/travel/tours/countries"),
+  ]);
+  const filtered = param(params.tourType) || param(params.search) || param(params.country);
+  const countryOptions = countries.ok ? countries.data : [];
+  const currentCountry = param(params.country) ?? "";
 
   return (
     <>
@@ -81,6 +88,43 @@ export default async function TravelPage({ searchParams }: PageProps<"/travel">)
           <FilterTabs basePath="/travel" param="tourType" options={TOUR_TYPES} current={param(params.tourType)} />
         </div>
 
+        {/* Search tours by country and destination */}
+        <form action="/travel" className="card mt-6 grid items-end gap-3 p-4 sm:grid-cols-2 lg:flex">
+          {param(params.tourType) ? <input type="hidden" name="tourType" value={param(params.tourType)} /> : null}
+          <label className="block min-w-0 lg:flex-1">
+            <span className="mb-1 block text-xs font-semibold tracking-wide text-slate-500 uppercase">Country</span>
+            <select name="country" defaultValue={currentCountry} className="input">
+              <option value="">All countries</option>
+              {/* keep a typed-in country (from the home page search) selectable */}
+              {currentCountry && !countryOptions.some((c) => c.toLowerCase() == currentCountry.toLowerCase()) ? (
+                <option value={currentCountry}>{currentCountry}</option>
+              ) : null}
+              {countryOptions.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block min-w-0 lg:flex-2">
+            <span className="mb-1 block text-xs font-semibold tracking-wide text-slate-500 uppercase">Destination or tour</span>
+            <input
+              name="search"
+              defaultValue={param(params.search) ?? ""}
+              placeholder="Phuket, Maldives, Kandy..."
+              className="input"
+            />
+          </label>
+          <button type="submit" className="btn-gold w-full px-8 lg:w-auto">
+            Search
+          </button>
+          {filtered ? (
+            <a href="/travel" className="btn-outline w-full lg:w-auto">
+              Clear
+            </a>
+          ) : null}
+        </form>
+
         <div className="mt-8">
           {!tours.ok ? (
             <ErrorNote message={tours.message} />
@@ -100,7 +144,7 @@ export default async function TravelPage({ searchParams }: PageProps<"/travel">)
                   fallbackImage={fallbackImage("TRAVEL")}
                   eyebrow={tour.destination}
                   title={tour.title}
-                  details={[`${tour.durationDays} days`, tour.isCustomisable ? "Customisable" : null]}
+                  details={[tour.country, `${tour.durationDays} days`, tour.isCustomisable ? "Customisable" : null]}
                   price={priceLabel(tour)}
                   badge={tour.tourType == "INBOUND" ? "Sri Lanka" : "Outbound"}
                 />
@@ -123,6 +167,10 @@ export default async function TravelPage({ searchParams }: PageProps<"/travel">)
           </div>
         </section>
       ) : null}
+
+      {!filtered ? <GallerySection /> : null}
+
+      <ReviewsSection returnTo="/travel" />
 
       <EnquirySection division={division} />
     </>

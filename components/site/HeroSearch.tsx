@@ -4,6 +4,7 @@ import Form from "next/form";
 import { useRouter } from "next/navigation";
 import { FormEvent, ReactNode, useState } from "react";
 import { DIVISIONS, GEM_TYPES } from "@/lib/divisions";
+import AirportInput from "./AirportInput";
 
 type Tab = "flights" | "tours" | "hotels" | "gems" | "trade";
 
@@ -47,8 +48,8 @@ export default function HeroSearch() {
   }
 
   return (
-    <div className="w-full max-w-5xl">
-      <div role="tablist" aria-label="Search" className="flex gap-1 overflow-x-auto px-2">
+    <div className="glass w-full max-w-5xl p-3 sm:p-4">
+      <div role="tablist" aria-label="Search" className="flex gap-1 overflow-x-auto pb-3">
         {TABS.map((item) => {
           const active = tab == item.key;
           return (
@@ -58,13 +59,13 @@ export default function HeroSearch() {
               role="tab"
               aria-selected={active}
               onClick={() => setTab(item.key)}
-              className={`flex shrink-0 items-center gap-2 rounded-t-xl px-4 py-3 text-sm font-semibold transition sm:px-6 ${
+              className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition sm:px-6 ${
                 active
-                  ? "bg-white text-navy-900 shadow-[0_-8px_20px_-10px_rgba(0,0,0,0.4)]"
-                  : "bg-white/60 text-navy-800 backdrop-blur hover:bg-white/80"
+                  ? "bg-gold-500 text-navy-950 shadow-[0_10px_24px_-12px_rgba(212,166,74,0.9)]"
+                  : "text-white/70 hover:bg-white/5 hover:text-white"
               }`}
             >
-              <svg viewBox="0 0 24 24" className={`h-5 w-5 ${active ? "text-gold-500" : "text-navy-700"}`} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg viewBox="0 0 24 24" className="h-4.5 w-4.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 {item.icon}
               </svg>
               {item.label}
@@ -73,13 +74,14 @@ export default function HeroSearch() {
         })}
       </div>
 
-      <div className="rounded-2xl bg-white p-4 text-navy-900 shadow-[0_2px_0_#e2e8f0,0_40px_80px_-30px_rgba(0,0,0,0.65)] sm:p-5">
+      <div className="rounded-2xl bg-white p-4 text-navy-900 sm:p-5">
         {tab == "flights" ? <FlightSearch /> : null}
 
         {tab == "tours" ? (
           <Form action="/travel">
             <Row>
-              <Field label="Destination" wide><input name="search" placeholder="Maldives, Thailand, Kandy..." className="input" /></Field>
+              <Field label="Destination" wide><input name="search" placeholder="Maldives, Phuket, Kandy..." className="input" /></Field>
+              <Field label="Country"><input name="country" placeholder="Any country" className="input" /></Field>
               <Field label="Tour type">
                 <select name="tourType" className="input" defaultValue="">
                   <option value="">All tours</option>
@@ -162,14 +164,14 @@ export function FlightSearch({ label = "Search" }: { label?: string }) {
       <div className="flex flex-wrap gap-4 text-sm">
         {["One way", "Round trip", "Multi-city"].map((trip, index) => (
           <label key={trip} className="flex items-center gap-1.5">
-            <input type="radio" name="trip" value={trip} defaultChecked={index == 1} className="accent-navy-900" />
+            <input type="radio" name="trip" value={trip} defaultChecked={index == 1} className="accent-gold-500" />
             {trip}
           </label>
         ))}
       </div>
       <Row>
-        <Field label="From"><input name="from" required placeholder="Colombo (CMB)" className="input" /></Field>
-        <Field label="To"><input name="to" required placeholder="Dubai (DXB)" className="input" /></Field>
+        <Field label="From"><AirportInput name="from" required placeholder="Colombo (CMB)" /></Field>
+        <Field label="To"><AirportInput name="to" required placeholder="Dubai (DXB)" /></Field>
         <Field label="Departure date"><input name="depart" type="date" required className="input" /></Field>
         <Field label="Return date"><input name="return" type="date" className="input" /></Field>
         <Field label="Passengers">

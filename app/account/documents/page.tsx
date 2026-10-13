@@ -34,6 +34,20 @@ export default async function MyDocumentsPage({ searchParams }: PageProps<"/acco
               { header: "Size", cell: (row) => formatFileSize(row.size), className: "whitespace-nowrap" },
               { header: "Added", cell: (row) => formatDate(row.createdAt), className: "whitespace-nowrap" },
               {
+                header: "Check",
+                cell: (row) =>
+                  row.approval == "PENDING" ? (
+                    <span className="badge bg-amber-100 text-amber-800">Waiting for approval</span>
+                  ) : row.approval == "APPROVED" ? (
+                    <span className="badge bg-green-100 text-green-800">Approved</span>
+                  ) : row.approval == "CANCELLED" ? (
+                    <>
+                      <span className="badge bg-red-100 text-red-800">Not accepted</span>
+                      {row.reviewNote ? <p className="mt-1 max-w-56 text-xs text-red-700">{row.reviewNote}</p> : null}
+                    </>
+                  ) : null,
+              },
+              {
                 header: "",
                 cell: (row) => (
                   // The download goes through the /api rewrite, so the login cookie is sent

@@ -20,7 +20,7 @@ export default function PhotoTile({
     <Tilt className="rounded-2xl">
       <Link
         href={href}
-        className={`group relative block overflow-hidden rounded-2xl shadow-[0_24px_40px_-24px_rgba(11,37,69,0.7)] ${tall ? "aspect-3/4" : "aspect-4/3"}`}
+        className={`group relative block overflow-hidden rounded-2xl border border-slate-200/60 shadow-[0_20px_40px_-28px_rgba(6,11,26,0.7)] ${tall ? "aspect-3/4" : "aspect-4/3"}`}
       >
         <Image
           src={image}
@@ -31,9 +31,9 @@ export default function PhotoTile({
         />
         <span className="absolute inset-0 bg-linear-to-t from-navy-950/90 via-navy-950/20 to-transparent" />
         <span className="absolute inset-x-0 bottom-0 p-5 text-white">
-          <span className="block text-lg font-semibold">{title}</span>
-          {text ? <span className="mt-0.5 block text-sm text-white/80">{text}</span> : null}
-          <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-gold-400 transition group-hover:gap-2">
+          <span className="block text-lg font-semibold tracking-tight">{title}</span>
+          {text ? <span className="mt-0.5 block text-sm text-white/75">{text}</span> : null}
+          <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-gold-400 transition group-hover:gap-2">
             Explore →
           </span>
         </span>

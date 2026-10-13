@@ -1,4 +1,4 @@
-// Line icons for services, shown on a raised colour tile
+// Line icons for services, gold on a navy tile
 const PATHS: Record<string, string> = {
   flight: "M2 16l20-6-2-3-7 2L7 3H5l3 7-4 1-2-2H1l1 4zM2 20h20",
   tour: "M12 3v18M5 8c2-3 5-4 7-5 2 1 5 2 7 5M4 21h16M8 12l4-4 4 4",
@@ -10,16 +10,11 @@ const PATHS: Record<string, string> = {
   insurance: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4",
 };
 
-export default function ServiceIcon({ name, color }: { name: keyof typeof PATHS | string; color: string }) {
+// `color` is accepted for existing callers; the tile itself is always navy and gold
+export default function ServiceIcon({ name }: { name: keyof typeof PATHS | string; color?: string }) {
   return (
-    <span
-      className="grid h-12 w-12 shrink-0 place-items-center rounded-xl text-white"
-      style={{
-        background: `linear-gradient(145deg, color-mix(in srgb, ${color} 75%, white), ${color})`,
-        boxShadow: `inset 0 1px 0 rgb(255 255 255 / 0.4), 0 4px 0 color-mix(in srgb, ${color} 70%, black), 0 12px 20px -8px ${color}`,
-      }}
-    >
-      <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-navy-900 text-gold-400 shadow-[0_8px_18px_-10px_rgba(6,11,26,0.8)]">
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d={PATHS[name] ?? PATHS.trade} />
       </svg>
     </span>

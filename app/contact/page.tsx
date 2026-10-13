@@ -38,7 +38,7 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
               <ol className="mt-6 space-y-5">
                 {STEPS.map((step, index) => (
                   <li key={step} className="flex items-start gap-4">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-linear-to-b from-gold-400 to-gold-500 font-extrabold text-navy-950 shadow-[0_4px_0_var(--color-gold-600)]">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-navy-900 font-bold text-gold-400">
                       {index + 1}
                     </span>
                     <span className="pt-2 text-sm">{step}</span>
@@ -52,6 +52,18 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
                 Sign in to see your enquiries, quotations, orders and documents in your account.
               </p>
               <Link href="/login" className="btn-outline btn-sm mt-4">Sign in</Link>
+            </div>
+            <div className="card p-5">
+              <h2 className="font-semibold text-navy-900">Would rather talk?</h2>
+              <p className="mt-2 text-sm">
+                Book a time to visit our office, or let us call you by phone or video.
+              </p>
+              <Link
+                href={isDivision(division) ? `/appointments?division=${division}` : "/appointments"}
+                className="btn-navy btn-sm mt-4"
+              >
+                Book an appointment
+              </Link>
             </div>
           </div>
           <div id="enquiry" className="card scroll-mt-36 p-6 sm:p-8">

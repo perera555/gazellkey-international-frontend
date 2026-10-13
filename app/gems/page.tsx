@@ -22,7 +22,7 @@ const division = DIVISIONS.GEMS;
 export default async function GemsPage({ searchParams }: PageProps<"/gems">) {
   const params = await searchParams;
   const items = await apiGet<GemItem[]>(
-    `/api/gems${toQuery(params, ["itemType", "category", "search", "pageNumber"], { pageSize: "12" })}`,
+    `/api/gems${toQuery(params, ["itemType", "category", "search", "pageNumber"], { pageSize: "12", status: "PUBLISHED" })}`,
   );
 
   // The chip matching the current ?search= or ?itemType= is highlighted

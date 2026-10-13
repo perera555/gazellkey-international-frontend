@@ -2,7 +2,7 @@ import Link from "next/link";
 
 type Chip = { href: string; label: string; active: boolean };
 
-// Row of raised filter chips; the active one is pressed in navy
+// Row of pill filter chips; the active one is filled gold
 export function ChipNav({ chips }: { chips: Chip[] }) {
   return (
     <div className="flex flex-wrap gap-2">
@@ -11,10 +11,10 @@ export function ChipNav({ chips }: { chips: Chip[] }) {
           key={chip.href}
           href={chip.href}
           aria-current={chip.active ? "page" : undefined}
-          className={`rounded-lg border px-4 py-1.5 text-sm font-medium transition ${
+          className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
             chip.active
-              ? "translate-y-0.5 border-navy-900 bg-navy-900 text-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.35)]"
-              : "border-slate-200 bg-white text-navy-900 shadow-[0_3px_0_#dbe3ee] hover:-translate-y-0.5 hover:border-navy-700/40"
+              ? "border-gold-500 bg-gold-500 text-navy-950 shadow-[0_8px_18px_-10px_rgba(212,166,74,0.9)]"
+              : "border-slate-200 bg-white text-slate-600 hover:border-gold-500/60 hover:text-navy-950"
           }`}
         >
           {chip.label}

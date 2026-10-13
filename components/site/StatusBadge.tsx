@@ -31,6 +31,7 @@ const TONES: Record<string, string> = {
   EXPIRED: "bg-slate-200 text-slate-700",
   FAILED: "bg-red-100 text-red-800",
   DELAYED: "bg-red-100 text-red-800",
+  NO_SHOW: "bg-red-100 text-red-800",
   REFUNDED: "bg-slate-200 text-slate-700",
   PARTIALLY_REFUNDED: "bg-amber-100 text-amber-800",
   // catalogue availability

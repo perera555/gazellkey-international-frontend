@@ -57,7 +57,13 @@ function QuotationCard({ quotation }: { quotation: MyQuotation }) {
             {formatDate(quotation.validUntil)}
           </p>
         </div>
-        <StatusBadge value={quotation.status == "SENT" && expired ? "EXPIRED" : quotation.status} />
+        <div className="flex items-center gap-2">
+          <StatusBadge value={quotation.status == "SENT" && expired ? "EXPIRED" : quotation.status} />
+          {/* PDF comes from the backend through the /api rewrite (login cookie included) */}
+          <a href={`/api/quotations/${quotation.id}/pdf?download=1`} className="btn-outline btn-sm">
+            ↓ Download PDF
+          </a>
+        </div>
       </header>
 
       <div className="overflow-x-auto px-5 py-4">

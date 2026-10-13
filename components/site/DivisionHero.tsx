@@ -40,32 +40,31 @@ export default function DivisionHero({
       <div
         className="absolute inset-0 -z-10"
         style={{
-          background: `linear-gradient(90deg, rgb(7 26 48 / 0.92) 0%, rgb(7 26 48 / 0.7) 45%, rgb(7 26 48 / 0.25) 100%), radial-gradient(circle at 90% 110%, ${division.color}88, transparent 50%)`,
+          background: `linear-gradient(90deg, rgb(6 11 26 / 0.95) 0%, rgb(6 11 26 / 0.8) 50%, rgb(6 11 26 / 0.5) 100%), radial-gradient(circle at 85% 100%, rgb(212 166 74 / 0.25), transparent 50%)`,
         }}
       />
+      <div className="grid-floor -z-10 opacity-60" aria-hidden="true" />
 
       <div className={`container-page relative ${breadcrumb ? "py-14 sm:py-16" : "py-16 sm:py-24"}`}>
-        <div className="flex flex-wrap items-center gap-2 text-sm text-white/70">
-          <Link href="/" className="hover:text-white">Home</Link>
+        <div className="flex flex-wrap items-center gap-2 text-sm text-white/55">
+          <Link href="/" className="hover:text-gold-400">Home</Link>
           <span>/</span>
           {breadcrumb ? (
             <>
-              <Link href={breadcrumb.href} className="hover:text-white">{breadcrumb.label}</Link>
+              <Link href={breadcrumb.href} className="hover:text-gold-400">{breadcrumb.label}</Link>
               <span>/</span>
             </>
           ) : null}
-          <span className="line-clamp-1 text-white">{title ?? division.name}</span>
+          <span className="line-clamp-1 text-white/85">{title ?? division.name}</span>
         </div>
-        <span
-          className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold tracking-wider uppercase backdrop-blur"
-        >
-          <span className="h-2 w-2 rounded-full" style={{ background: division.color }} />
+        <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-gold-500/40 bg-gold-500/5 px-4 py-1.5 text-xs font-semibold tracking-[0.2em] text-gold-400 uppercase">
+          <span className="h-1.5 w-1.5 rounded-full bg-gold-400" />
           {division.name}
         </span>
-        <h1 className="text-3d mt-4 max-w-3xl font-display text-4xl leading-tight font-semibold sm:text-5xl">
+        <h1 className="text-3d mt-5 max-w-3xl text-4xl leading-tight sm:text-5xl">
           {title ?? division.name}
         </h1>
-        <p className="mt-4 max-w-2xl text-lg text-white/85">{subtitle ?? division.tagline}</p>
+        <p className="mt-4 max-w-2xl text-lg text-white/70">{subtitle ?? division.tagline}</p>
         {children ? <div className="mt-8">{children}</div> : null}
       </div>
     </section>

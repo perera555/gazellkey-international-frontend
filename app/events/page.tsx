@@ -25,7 +25,7 @@ export default async function EventsPage({ searchParams }: PageProps<"/events">)
   const params = await searchParams;
   const past = param(params.past) == "true";
   const events = await apiGet<EventItem[]>(
-    `/api/events${toQuery(params, ["eventType", "past", "search", "pageNumber"], { pageSize: "9" })}`,
+    `/api/events${toQuery(params, ["eventType", "past", "search", "pageNumber"], { pageSize: "9", status: "PUBLISHED" })}`,
   );
 
   return (

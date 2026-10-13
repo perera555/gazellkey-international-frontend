@@ -27,6 +27,7 @@ export default async function TradeCatalogue({
     `/api/trade/products${toQuery(searchParams, ["category", "search", "pageNumber"], {
       direction: direction,
       pageSize: "12",
+      status: "PUBLISHED",
     })}`,
   );
 

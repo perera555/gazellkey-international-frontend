@@ -4,32 +4,67 @@ import ErrorNote from "@/components/site/ErrorNote";
 import StatusBadge from "@/components/site/StatusBadge";
 import { apiGetMine } from "@/lib/api";
 import { DIVISIONS } from "@/lib/divisions";
-import { formatDate, formatMoney } from "@/lib/format";
+import { formatDate, formatMoney, formatOfficeClock, formatOfficeDay, modeLabel } from "@/lib/format";
 import { requireCustomer } from "@/lib/session";
-import { MyEnquiry, MyOrder, MyQuotation } from "@/lib/types";
+import { MyAppointment, MyEnquiry, MyOrder, MyQuotation } from "@/lib/types";
 
 export default async function AccountOverviewPage() {
   const user = await requireCustomer("/account");
-  const [enquiries, quotations, orders] = await Promise.all([
+  const [enquiries, quotations, orders, appointments] = await Promise.all([
     apiGetMine<MyEnquiry[]>("/api/me/enquiries?pageSize=5", "/account"),
     apiGetMine<MyQuotation[]>("/api/me/quotations?pageSize=50", "/account"),
     apiGetMine<MyOrder[]>("/api/me/orders?pageSize=50", "/account"),
+    apiGetMine<MyAppointment[]>("/api/me/appointments?pageSize=50", "/account"),
   ]);
 
   const awaitingReply = quotations.ok ? quotations.data.filter((q) => q.status == "SENT") : [];
   const activeOrders = orders.ok
     ? orders.data.filter((o) => o.status != "COMPLETED" && o.status != "CANCELLED")
     : [];
+  const now = Date.now();
+  const upcoming = appointments.ok
+    ? appointments.data
+        .filter(
+          (a) => new Date(a.endAt).getTime() >= now && (a.status == "REQUESTED" || a.status == "CONFIRMED"),
+        )
+        .sort((a, b) => a.startAt.localeCompare(b.startAt))
+    : [];
+  const next = upcoming[0];
 
   return (
     <>
       <AccountHeading title={`Welcome, ${user.firstName}`} text="Everything you have with Gazellekey, in one place." />
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Stat label="Enquiries" value={enquiries.ok ? enquiries.pagination?.totalCount ?? enquiries.data.length : "-"} href="/account/enquiries" />
         <Stat label="Quotes awaiting your reply" value={awaitingReply.length} href="/account/quotations" highlight={awaitingReply.length > 0} />
         <Stat label="Active orders & bookings" value={activeOrders.length} href="/account/orders" />
+        <Stat label="Upcoming appointments" value={upcoming.length} href="/account/appointments" />
       </div>
+
+      {next ? (
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5">
+          <div>
+            <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">Next appointment</p>
+            <p className="mt-1 font-semibold text-navy-900">
+              {formatOfficeDay(next.startAt)}, {formatOfficeClock(next.startAt)}
+            </p>
+            <p className="text-sm text-slate-600">
+              {next.subject} · {modeLabel(next.mode)} · <StatusBadge value={next.status} />
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {next.googleCalendarUrl ? (
+              <a href={next.googleCalendarUrl} target="_blank" rel="noreferrer" className="btn-gold btn-sm">
+                Add to Google Calendar
+              </a>
+            ) : null}
+            <Link href="/account/appointments" className="btn-outline btn-sm">
+              Details
+            </Link>
+          </div>
+        </div>
+      ) : null}
 
       {awaitingReply.length > 0 ? (
         <div className="mt-8 rounded-2xl border border-gold-400 bg-gold-100 p-5">

@@ -3,6 +3,7 @@ import { cache } from "react";
 import DetailLayout, { FactList } from "@/components/site/DetailLayout";
 import DivisionHero from "@/components/site/DivisionHero";
 import EnquiryForm from "@/components/forms/EnquiryForm";
+import ReviewsSection from "@/components/site/ReviewsSection";
 import { apiGetItem } from "@/lib/api";
 import { DIVISIONS } from "@/lib/divisions";
 import { formatDate, priceLabel } from "@/lib/format";
@@ -85,6 +86,7 @@ export default async function TourPage({ params }: PageProps<"/travel/[slug]">) 
                 <FactList
                   facts={[
                     ["Destination", tour.destination],
+                    ["Country", tour.country],
                     ["Duration", `${tour.durationDays} days`],
                     ["Group size", groupSize],
                     ["Custom / private", tour.isCustomisable ? "Available" : null],
@@ -119,6 +121,13 @@ export default async function TourPage({ params }: PageProps<"/travel/[slug]">) 
             </div>
           </>
         }
+      />
+      <ReviewsSection
+        tourId={tour.id}
+        tourTitle={tour.title}
+        heading="Reviews of this tour"
+        text="What travellers say about this package."
+        returnTo={`/travel/${tour.slug}`}
       />
     </>
   );

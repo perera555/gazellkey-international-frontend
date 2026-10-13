@@ -39,6 +39,7 @@ export interface Tour {
   title: string;
   tourType: "OUTBOUND" | "INBOUND";
   destination: string;
+  country: string | null;
   summary: string;
   itinerary: { day?: number; title?: string; description?: string }[] | null;
   durationDays: number;
@@ -238,6 +239,9 @@ export interface MyPayment {
 
 export interface MyDocument extends PublicDocument {
   division: Division | null;
+  // Some uploads (passport, permit ...) wait for an admin's approval
+  approval: "NOT_REQUIRED" | "PENDING" | "APPROVED" | "CANCELLED";
+  reviewNote: string | null; // reason when not accepted
 }
 
 export interface MyEventRegistration {
@@ -263,6 +267,37 @@ export interface MyMessage {
   body: string;
   status: string;
   createdAt: string;
+}
+
+export type AppointmentMode = "IN_PERSON" | "PHONE" | "VIDEO";
+
+export interface MyAppointment {
+  id: string;
+  reference: string;
+  division: Division;
+  serviceType: string | null;
+  subject: string;
+  message: string | null;
+  mode: AppointmentMode;
+  startAt: string;
+  endAt: string;
+  status: "REQUESTED" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "NO_SHOW";
+  location: string | null;
+  meetingLink: string | null;
+  cancelReason: string | null;
+  createdAt: string;
+  place: string; // where to go / how we connect
+  googleCalendarUrl: string | null; // "Add to Google Calendar", confirmed only
+}
+
+// GET /api/appointments/slots
+export interface AppointmentSlots {
+  date: string;
+  division: Division;
+  timeZone: string;
+  slotMinutes: number;
+  maxDaysAhead: number;
+  slots: string[];
 }
 
 export interface MyTravel {
@@ -295,4 +330,46 @@ export interface MyTravel {
     policyNumber: string | null;
     createdAt: string;
   }[];
+}
+
+// ─────────────── Gallery & reviews ───────────────
+
+export interface GalleryPhoto {
+  id: string;
+  title: string;
+  caption: string | null;
+  place: string | null;
+  country: string | null;
+  takenAt: string | null;
+  src: string; // ready for <img src>
+}
+
+export interface Review {
+  id: string;
+  rating: number;
+  title: string | null;
+  body: string;
+  tripDate: string | null;
+  createdAt: string;
+  author: string; // "Nimali P."
+  country: string | null;
+  tour: { id: string; slug: string; title: string } | null;
+}
+
+export interface ReviewSummary {
+  average: number | null;
+  count: number;
+  stars: { stars: number; count: number }[];
+}
+
+export interface MyReview {
+  id: string;
+  rating: number;
+  title: string | null;
+  body: string;
+  tripDate: string | null;
+  status: "PUBLISHED" | "HIDDEN";
+  removedReason: string | null;
+  createdAt: string;
+  tour: { id: string; slug: string; title: string } | null;
 }

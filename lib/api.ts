@@ -45,6 +45,18 @@ export async function apiGet<T>(path: string): Promise<ApiResult<T>> {
   return { ok: true, data: body.data, pagination: body.pagination };
 }
 
+// Like apiGet, for routes that send more next to "data"
+// (the star summary of /api/reviews, the countries of /api/gallery)
+export async function apiGetBody<B>(
+  path: string,
+): Promise<{ ok: true; body: B } | { ok: false; status: number; message: string }> {
+  const { status, ok, body } = await apiFetch(path);
+  if (!ok) {
+    return { ok: false, status: status, message: body.message ?? "Something went wrong." };
+  }
+  return { ok: true, body: body as B };
+}
+
 // GET one catalogue item for a detail page. 404 -> the not-found page.
 export async function apiGetItem<T>(path: string): Promise<T> {
   const result = await apiGet<T>(path);

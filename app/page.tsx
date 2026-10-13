@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import GallerySection from "@/components/site/GallerySection";
 import HeroSearch from "@/components/site/HeroSearch";
+import ReviewsSection from "@/components/site/ReviewsSection";
 import ItemCard from "@/components/site/ItemCard";
 import PhotoTile from "@/components/site/PhotoTile";
 import ServiceIcon from "@/components/site/ServiceIcon";
@@ -37,9 +39,10 @@ export default async function HomePage() {
   // Hero text is editable by staff (content key "home.hero"); fall back to the default
   const [hero, events, tours, gems] = await Promise.all([
     apiGet<ContentBlock>("/api/content/home.hero"),
-    apiGet<EventItem[]>("/api/events?pageSize=3"),
-    apiGet<Tour[]>("/api/travel/tours?pageSize=3"),
-    apiGet<GemItem[]>("/api/gems?pageSize=4"),
+    // status=PUBLISHED: signed-in staff would otherwise also get drafts
+    apiGet<EventItem[]>("/api/events?pageSize=3&status=PUBLISHED"),
+    apiGet<Tour[]>("/api/travel/tours?pageSize=3&status=PUBLISHED"),
+    apiGet<GemItem[]>("/api/gems?pageSize=4&status=PUBLISHED"),
   ]);
 
   const heroTitle = hero.ok ? hero.data.title : "Explore the World With Gazellekey";
@@ -60,17 +63,19 @@ export default async function HomePage() {
           sizes="100vw"
           className="-z-20 animate-hero-zoom object-cover"
         />
-        <div className="absolute inset-0 -z-10 bg-linear-to-r from-navy-950/85 via-navy-950/45 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-linear-to-t from-navy-950/60 to-transparent" />
+        <div className="absolute inset-0 -z-10 bg-linear-to-r from-navy-950/95 via-navy-950/80 to-navy-950/55" />
+        <div className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-linear-to-t from-navy-950 to-transparent" />
+        <div className="grid-floor -z-10" aria-hidden="true" />
 
-        <div className="container-page relative pt-20 pb-16 sm:pt-28">
-          <p className="text-sm font-semibold tracking-[0.25em] text-gold-400 uppercase">
+        <div className="container-page relative pt-20 pb-20 sm:pt-28">
+          <p className="inline-flex items-center gap-2 rounded-full border border-gold-500/40 bg-gold-500/5 px-4 py-1.5 text-xs font-semibold tracking-[0.25em] text-gold-400 uppercase">
+            <span className="h-1.5 w-1.5 rounded-full bg-gold-400" aria-hidden="true" />
             Gazellekey International
           </p>
-          <h1 className="text-3d mt-4 max-w-2xl text-4xl leading-[1.1] font-extrabold sm:text-6xl">
+          <h1 className="text-3d mt-6 max-w-3xl text-4xl leading-[1.05] sm:text-6xl lg:text-7xl">
             {heroTitle}
           </h1>
-          <p className="mt-5 max-w-xl text-lg text-white/90 sm:text-xl">{heroText}</p>
+          <p className="mt-6 max-w-xl text-lg text-white/70">{heroText}</p>
           <div className="mt-12 sm:mt-16">
             <HeroSearch />
           </div>
@@ -78,15 +83,15 @@ export default async function HomePage() {
       </section>
 
       {/* Quick links */}
-      <section className="relative bg-navy-50 pt-12 pb-16">
+      <section className="relative border-b border-slate-200 bg-white pt-12 pb-16">
         <div className="container-page grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
           {QUICK_LINKS.map((link) => (
             <Tilt key={link.title} className="rounded-2xl">
-              <Link href={link.href} className="card flex h-full flex-col items-start gap-3 p-5">
+              <Link href={link.href} className="card group flex h-full flex-col items-start gap-4 p-5">
                 <ServiceIcon name={link.icon} color={link.color} />
                 <span>
-                  <span className="block font-semibold text-navy-900">{link.title}</span>
-                  <span className="block text-sm text-slate-500">{link.text}</span>
+                  <span className="block font-semibold tracking-tight text-navy-950 transition group-hover:text-gold-500">{link.title}</span>
+                  <span className="mt-1 block text-sm text-slate-500">{link.text}</span>
                 </span>
               </Link>
             </Tilt>
@@ -126,16 +131,13 @@ export default async function HomePage() {
       </section>
 
       {/* Gems */}
-      <section className="reveal relative overflow-hidden bg-navy-950 py-20 text-white">
-        <div
-          className="absolute inset-0 opacity-60"
-          style={{ background: `radial-gradient(circle at 85% 15%, ${DIVISIONS.GEMS.color}aa, transparent 45%)` }}
-        />
+      <section className="reveal relative overflow-hidden bg-linear-to-br from-navy-900 to-navy-950 py-24 text-white">
+        <div className="grid-floor" aria-hidden="true" />
         <div className="container-page relative grid items-center gap-12 lg:grid-cols-[1fr_1.6fr]">
           <div>
-            <p className="text-sm font-semibold tracking-[0.2em] text-gold-400 uppercase">Gems & Jewellery</p>
-            <h2 className="text-3d mt-3 font-display text-4xl font-semibold">Gemstone Collection</h2>
-            <p className="mt-4 text-white/80">
+            <p className="eyebrow">Gems & Jewellery</p>
+            <h2 className="text-3d mt-4 text-4xl sm:text-5xl">Gemstone Collection</h2>
+            <p className="mt-4 text-white/70">
               Certified natural Ceylon sapphires, rubies and fine jewellery - with certificates
               where available, and custom pieces made to order.
             </p>
@@ -144,7 +146,7 @@ export default async function HomePage() {
                 <Link
                   key={chip.href}
                   href={chip.href}
-                  className="rounded-lg border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/20"
+                  className="rounded-full border border-gold-500/40 px-4 py-1.5 text-sm font-medium text-gold-400 transition hover:border-gold-400 hover:bg-gold-500/10"
                 >
                   {chip.label}
                 </Link>
@@ -191,7 +193,7 @@ export default async function HomePage() {
       </section>
 
       {events.ok && events.data.length > 0 ? (
-        <section className="reveal bg-navy-50 py-20">
+        <section className="reveal border-y border-slate-200 bg-navy-50 py-20">
           <div className="container-page">
             <SectionHeading title="Upcoming Events" href="/events" />
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -215,29 +217,33 @@ export default async function HomePage() {
       {/* How it works */}
       <section className="reveal container-page py-20">
         <h2 className="heading-display text-center text-3xl sm:text-4xl">One team, one simple process</h2>
-        <div className="mt-12 grid gap-8 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
           {[
             ["Send one enquiry", "Tell us what you need - a ticket, a tour, a gem or a shipment."],
             ["Get a clear quotation", "The right specialist replies with options and a quote you can accept online."],
             ["Track it in your account", "Follow bookings, orders, payments and documents in one place."],
           ].map(([title, text], index) => (
-            <div key={title} className="card relative p-7 pt-10">
-              <span className="absolute -top-6 left-7 grid h-12 w-12 place-items-center rounded-xl bg-linear-to-b from-gold-400 to-gold-500 text-xl font-extrabold text-navy-950 shadow-[0_4px_0_var(--color-gold-600),0_14px_20px_-8px_rgba(201,162,39,0.8)]">
+            <div key={title} className="card p-7">
+              <span className="grid h-11 w-11 place-items-center rounded-xl bg-navy-900 text-lg font-bold text-gold-400">
                 {index + 1}
               </span>
-              <h3 className="text-lg font-semibold text-navy-900">{title}</h3>
+              <h3 className="mt-5 text-lg font-semibold tracking-tight text-navy-950">{title}</h3>
               <p className="mt-2 text-sm text-slate-600">{text}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-navy-900 py-16 text-white">
-        <div className="grid-floor opacity-50" aria-hidden="true" />
+      <GallerySection />
+
+      <ReviewsSection returnTo="/" heading="Loved by our travellers" limit={4} />
+
+      <section className="relative overflow-hidden bg-linear-to-r from-navy-950 to-navy-900 py-16 text-white">
+        <div className="grid-floor opacity-70" aria-hidden="true" />
         <div className="container-page relative flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <div>
-            <h2 className="text-3d font-display text-3xl font-semibold">Track everything in one place</h2>
-            <p className="mt-2 text-white/80">
+            <h2 className="text-3d text-3xl">Track everything in one place</h2>
+            <p className="mt-2 text-white/70">
               Create a free account to follow your enquiries, accept quotations and download your documents.
             </p>
           </div>
@@ -253,7 +259,7 @@ function SectionHeading({ title, text, href }: { title: string; text?: string; h
     <div className="flex items-end justify-between gap-4">
       <div>
         <h2 className="heading-display text-3xl sm:text-4xl">{title}</h2>
-        {text ? <p className="mt-2 max-w-2xl text-slate-600">{text}</p> : null}
+        {text ? <p className="mt-3 max-w-2xl text-slate-500">{text}</p> : null}
       </div>
       <Link href={href} className="btn-outline btn-sm shrink-0">View All</Link>
     </div>

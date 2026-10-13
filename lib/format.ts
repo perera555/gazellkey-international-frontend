@@ -60,6 +60,44 @@ export function formatDateRange(start: string, end: string) {
   return from == to ? from : `${from} - ${to}`;
 }
 
+// Appointments are in office time (Sri Lanka), wherever the visitor is
+export const OFFICE_TIME_ZONE = "Asia/Colombo";
+
+export const APPOINTMENT_MODES = [
+  { value: "IN_PERSON", label: "Office visit", text: "Meet us at our office" },
+  { value: "PHONE", label: "Phone call", text: "We call you" },
+  { value: "VIDEO", label: "Video call", text: "Online meeting" },
+] as const;
+
+export function modeLabel(mode: string) {
+  return APPOINTMENT_MODES.find((item) => item.value == mode)?.label ?? humanize(mode);
+}
+
+// "Thursday, 15 October 2026"
+export function formatOfficeDay(value: Date | string) {
+  return new Date(value).toLocaleDateString("en-GB", {
+    timeZone: OFFICE_TIME_ZONE,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+// "09:30"
+export function formatOfficeClock(value: Date | string) {
+  return new Date(value).toLocaleTimeString("en-GB", {
+    timeZone: OFFICE_TIME_ZONE,
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+// "2026-10-15" of a moment, in office time (for <input type="date">)
+export function officeDay(value: Date) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: OFFICE_TIME_ZONE }).format(value);
+}
+
 // "AWAITING_CUSTOMER" -> "Awaiting customer"
 export function humanize(value: string | null | undefined) {
   if (!value) {

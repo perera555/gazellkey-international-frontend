@@ -18,7 +18,7 @@ export default function DetailLayout({
   aside: ReactNode;
 }) {
   return (
-    <div className="bg-linear-to-b from-navy-50 to-white">
+    <div className="bg-[#f8f9fb]">
       <div className="container-page grid gap-10 py-12 lg:grid-cols-[1fr_380px]">
         <div className="min-w-0 space-y-8">
           <Gallery title={title} images={images.length > 0 ? images : [fallbackImage]} />
@@ -34,7 +34,7 @@ function Gallery({ title, images }: { title: string; images: string[] }) {
   return (
     <div className="space-y-4">
       <Tilt max={4} className="rounded-3xl">
-        <div className="overflow-hidden rounded-3xl border-4 border-white shadow-[0_30px_60px_-30px_rgba(11,37,69,0.6)]">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-[0_30px_60px_-30px_rgba(6,11,26,0.5)]">
           {/* Images are URLs from the catalogue on any host, so a plain <img> */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={images[0]} alt={title} className="aspect-video w-full object-cover" />
@@ -48,7 +48,7 @@ function Gallery({ title, images }: { title: string; images: string[] }) {
               href={image}
               target="_blank"
               rel="noreferrer"
-              className="overflow-hidden rounded-xl border-2 border-white shadow-md transition hover:-translate-y-1 hover:shadow-xl"
+              className="overflow-hidden rounded-xl border border-slate-200 transition hover:-translate-y-1 hover:border-gold-500/60 hover:shadow-lg"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={image} alt={`${title} photo ${index + 2}`} className="aspect-square w-full object-cover" />

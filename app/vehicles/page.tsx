@@ -26,7 +26,7 @@ export default async function VehiclesPage({ searchParams }: PageProps<"/vehicle
     `/api/vehicles${toQuery(
       params,
       ["listingType", "make", "yearFrom", "yearTo", "search", "pageNumber"],
-      { pageSize: "12" },
+      { pageSize: "12", status: "PUBLISHED" },
     )}`,
   );
 

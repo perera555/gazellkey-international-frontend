@@ -47,19 +47,20 @@ export function LogoMark({ className = "", light = false }: { className?: string
 // Full logo. "light" is for navy backgrounds (footer).
 export default function Logo({ light = false }: { light?: boolean }) {
   return (
-    <span className="group/logo flex items-center gap-2">
-      <LogoMark
-        light={light}
-        className="h-12 w-12 shrink-0 drop-shadow-[0_6px_8px_rgba(11,37,69,0.25)] transition duration-500 group-hover/logo:-rotate-6 group-hover/logo:scale-105"
-      />
+    <span className="group/logo flex items-center gap-3">
+      <span
+        className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl border transition duration-500 group-hover/logo:border-gold-400 ${
+          light ? "border-gold-500/40 bg-white/5" : "border-gold-500/40 bg-gold-100/40"
+        }`}
+      >
+        <LogoMark light={light} className="h-9 w-9 transition duration-500 group-hover/logo:-rotate-6 group-hover/logo:scale-105" />
+      </span>
       <span className="leading-none">
-        <span
-          className={`block text-[1.35rem] font-extrabold tracking-tight ${light ? "text-white" : "text-navy-900"}`}
-        >
+        <span className="block text-base font-bold tracking-[0.2em] text-gold-400">
           GAZELLEKEY
         </span>
         <span
-          className={`mt-1 block text-[0.6rem] font-semibold tracking-[0.12em] ${light ? "text-gold-400" : "text-navy-700"}`}
+          className={`mt-1.5 block text-[0.6rem] font-semibold tracking-[0.22em] ${light ? "text-white/50" : "text-slate-500"}`}
         >
           INTERNATIONAL (PVT) LTD
         </span>
