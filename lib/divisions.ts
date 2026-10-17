@@ -26,6 +26,7 @@ export const DIVISIONS: Record<Division, DivisionInfo> = {
       { value: "OUTBOUND_TOUR", label: "Outbound tours" },
       { value: "INBOUND_TOUR", label: "Inbound tours" },
       { value: "AIR_TICKET", label: "Air ticketing" },
+      { value: "HOTEL", label: "Hotel booking" },
       { value: "TRAVEL_INSURANCE", label: "Travel insurance" },
     ],
   },

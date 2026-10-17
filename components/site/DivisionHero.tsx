@@ -61,12 +61,15 @@ export default function DivisionHero({
           <span className="h-1.5 w-1.5 rounded-full bg-gold-400" />
           {division.name}
         </span>
-        <h1 className="text-3d mt-5 max-w-3xl text-4xl leading-tight sm:text-5xl">
+        <h1 className="text-3d mt-5 max-w-3xl text-4xl leading-[1.1] font-extrabold sm:text-6xl">
           {title ?? division.name}
         </h1>
-        <p className="mt-4 max-w-2xl text-lg text-white/70">{subtitle ?? division.tagline}</p>
+        <span className="mt-5 block h-1 w-16 rounded-full bg-linear-to-r from-gold-400 to-gold-600" aria-hidden="true" />
+        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/75">{subtitle ?? division.tagline}</p>
         {children ? <div className="mt-8">{children}</div> : null}
       </div>
+      {/* soft fade into the page below */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-black/25 to-transparent" aria-hidden="true" />
     </section>
   );
 }

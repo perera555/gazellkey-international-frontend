@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { FormEvent, ReactNode, useState } from "react";
 import { DIVISIONS, GEM_TYPES } from "@/lib/divisions";
 import AirportInput from "./AirportInput";
+import PlacePicker from "./PlacePicker";
+import type { CountryEntry } from "@/lib/places";
 
 type Tab = "flights" | "tours" | "hotels" | "gems" | "trade";
 
@@ -31,20 +33,25 @@ function enquiryHref(service: string, subject: string, lines: string[]) {
 }
 
 // Tabbed search panel in the home page hero (slide 6 of the design document)
-export default function HeroSearch() {
+export default function HeroSearch({
+  tourPlaces = [],
+  hotelPlaces = [],
+}: {
+  tourPlaces?: CountryEntry[]; // country -> destination lists (lib/places.ts)
+  hotelPlaces?: CountryEntry[]; // country -> city -> hotel lists
+}) {
   const [tab, setTab] = useState<Tab>("flights");
   const router = useRouter();
 
+  // Hotels: show our hotel list for that country / city; the dates go along
+  // to the booking request on each hotel page
   function onHotels(event: FormEvent<HTMLFormElement>) {
     const value = reader(event);
-    router.push(
-      enquiryHref("", `Hotel reservation: ${value("city")}`, [
-        `Destination: ${value("city")}`,
-        `Check-in: ${value("checkin")}`,
-        `Check-out: ${value("checkout")}`,
-        `Guests: ${value("guests")}`,
-      ]),
-    );
+    const query = new URLSearchParams();
+    for (const key of ["country", "city", "checkin", "checkout", "guests"]) {
+      if (value(key)) query.set(key, value(key));
+    }
+    router.push(`/hotels${query.size ? `?${query}` : ""}`);
   }
 
   return (
@@ -80,8 +87,7 @@ export default function HeroSearch() {
         {tab == "tours" ? (
           <Form action="/travel">
             <Row>
-              <Field label="Destination" wide><input name="search" placeholder="Maldives, Phuket, Kandy..." className="input" /></Field>
-              <Field label="Country"><input name="country" placeholder="Any country" className="input" /></Field>
+              <PlacePicker countries={tourPlaces} placeParam="search" placeLabel="Destination" countLabel="tour" fieldClassName="lg:flex-1" />
               <Field label="Tour type">
                 <select name="tourType" className="input" defaultValue="">
                   <option value="">All tours</option>
@@ -97,7 +103,7 @@ export default function HeroSearch() {
         {tab == "hotels" ? (
           <form onSubmit={onHotels}>
             <Row>
-              <Field label="City or hotel" wide><input name="city" required placeholder="Where are you staying?" className="input" /></Field>
+              <PlacePicker countries={hotelPlaces} placeParam="city" placeLabel="City" countLabel="hotel" fieldClassName="lg:flex-1" />
               <Field label="Check-in"><input name="checkin" type="date" required className="input" /></Field>
               <Field label="Check-out"><input name="checkout" type="date" required className="input" /></Field>
               <Field label="Guests">
@@ -142,47 +148,157 @@ function reader(event: FormEvent<HTMLFormElement>) {
 }
 
 // Flight search (slide 7): becomes an air-ticket request our team prices
+const TRIPS = ["One way", "Round trip", "Multi-city"] as const;
+type Trip = (typeof TRIPS)[number];
+const MAX_LEGS = 6;
+
 export function FlightSearch({ label = "Search" }: { label?: string }) {
   const router = useRouter();
+  const [trip, setTrip] = useState<Trip>("Round trip");
+  // multi-city flights; ids keep each row's inputs in place when one is removed
+  const [legs, setLegs] = useState<number[]>([1, 2]);
+  const [nextLeg, setNextLeg] = useState(3);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     const value = reader(event);
+    const passengers = `Passengers: ${value("passengers")}`;
+    const cabin = `Class: ${value("cabin")}`;
+
+    if (trip == "Multi-city") {
+      const flights = legs.map((leg, index) => ({
+        number: index + 1,
+        from: value(`from-${leg}`),
+        to: value(`to-${leg}`),
+        date: value(`date-${leg}`),
+      }));
+      const route = [flights[0].from, ...flights.map((flight) => flight.to)].join(" → ");
+      router.push(
+        enquiryHref("AIR_TICKET", `Air ticket (multi-city): ${route}`.slice(0, 200), [
+          "Trip: Multi-city",
+          ...flights.map((flight) => `Flight ${flight.number}: ${flight.from} to ${flight.to} on ${flight.date}`),
+          passengers,
+          cabin,
+        ]),
+      );
+      return;
+    }
+
     router.push(
       enquiryHref("AIR_TICKET", `Air ticket: ${value("from")} to ${value("to")}`, [
-        `Trip: ${value("trip")}`,
+        `Trip: ${trip}`,
         `From: ${value("from")}`,
         `To: ${value("to")}`,
         `Departure date: ${value("depart")}`,
-        value("return") ? `Return date: ${value("return")}` : "",
-        `Passengers: ${value("passengers")}`,
+        trip == "Round trip" && value("return") ? `Return date: ${value("return")}` : "",
+        passengers,
+        cabin,
       ]),
     );
   }
 
+  const passengerFields = (
+    <>
+      <Field label="Passengers">
+        <select name="passengers" className="input" defaultValue="1 adult">
+          {["1 adult", "2 adults", "3 adults", "4 adults", "5+ travellers"].map((count) => (
+            <option key={count}>{count}</option>
+          ))}
+        </select>
+      </Field>
+      <Field label="Class">
+        <select name="cabin" className="input" defaultValue="Economy">
+          {["Economy", "Premium economy", "Business", "First"].map((cabin) => (
+            <option key={cabin}>{cabin}</option>
+          ))}
+        </select>
+      </Field>
+    </>
+  );
+
   return (
     <form onSubmit={onSubmit} className="space-y-3">
-      <div className="flex flex-wrap gap-4 text-sm">
-        {["One way", "Round trip", "Multi-city"].map((trip, index) => (
-          <label key={trip} className="flex items-center gap-1.5">
-            <input type="radio" name="trip" value={trip} defaultChecked={index == 1} className="accent-gold-500" />
-            {trip}
+      <div className="flex flex-wrap gap-2 text-sm" role="radiogroup" aria-label="Trip type">
+        {TRIPS.map((option) => (
+          <label
+            key={option}
+            className={`flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-medium transition ${
+              trip == option ? "border-gold-500 bg-gold-100 text-navy-950" : "border-slate-200 text-slate-600 hover:border-slate-300"
+            }`}
+          >
+            <input
+              type="radio"
+              name="trip"
+              value={option}
+              checked={trip == option}
+              onChange={() => setTrip(option)}
+              className="accent-gold-500"
+            />
+            {option}
           </label>
         ))}
       </div>
-      <Row>
-        <Field label="From"><AirportInput name="from" required placeholder="Colombo (CMB)" /></Field>
-        <Field label="To"><AirportInput name="to" required placeholder="Dubai (DXB)" /></Field>
-        <Field label="Departure date"><input name="depart" type="date" required className="input" /></Field>
-        <Field label="Return date"><input name="return" type="date" className="input" /></Field>
-        <Field label="Passengers">
-          <select name="passengers" className="input" defaultValue="1 adult">
-            {["1 adult", "2 adults", "3 adults", "4 adults", "5+ travellers"].map((count) => (
-              <option key={count}>{count}</option>
-            ))}
-          </select>
-        </Field>
-        <SearchButton label={label} />
-      </Row>
+
+      {trip == "Multi-city" ? (
+        <div className="space-y-3">
+          {legs.map((leg, index) => (
+            <div key={leg} className="grid items-end gap-3 rounded-2xl border border-slate-200 bg-slate-50/60 p-3 sm:grid-cols-[auto_1fr_1fr_1fr_auto]">
+              <span className="grid h-10 w-10 place-items-center self-end rounded-xl bg-navy-900 text-xs font-bold text-gold-400" title={`Flight ${index + 1}`}>
+                {index + 1}
+              </span>
+              <Field label={`Flight ${index + 1} - from`}>
+                <AirportInput name={`from-${leg}`} required placeholder={index == 0 ? "Colombo (CMB)" : "From"} />
+              </Field>
+              <Field label="To">
+                <AirportInput name={`to-${leg}`} required placeholder={index == 0 ? "Dubai (DXB)" : "To"} />
+              </Field>
+              <Field label="Date">
+                <input name={`date-${leg}`} type="date" required className="input" />
+              </Field>
+              {legs.length > 2 ? (
+                <button
+                  type="button"
+                  onClick={() => setLegs(legs.filter((each) => each != leg))}
+                  aria-label={`Remove flight ${index + 1}`}
+                  className="grid h-10 w-10 place-items-center self-end rounded-xl border border-slate-200 bg-white text-slate-500 hover:border-red-300 hover:text-red-600"
+                >
+                  ×
+                </button>
+              ) : (
+                <span className="hidden w-10 sm:block" aria-hidden="true" />
+              )}
+            </div>
+          ))}
+          {legs.length < MAX_LEGS ? (
+            <button
+              type="button"
+              onClick={() => {
+                setLegs([...legs, nextLeg]);
+                setNextLeg(nextLeg + 1);
+              }}
+              className="btn-outline btn-sm"
+            >
+              + Add another flight
+            </button>
+          ) : (
+            <p className="text-xs text-slate-500">Up to {MAX_LEGS} flights. For longer trips, add details in the message.</p>
+          )}
+          <Row>
+            {passengerFields}
+            <SearchButton label={label} />
+          </Row>
+        </div>
+      ) : (
+        <Row>
+          <Field label="From"><AirportInput name="from" required placeholder="Colombo (CMB)" /></Field>
+          <Field label="To"><AirportInput name="to" required placeholder="Dubai (DXB)" /></Field>
+          <Field label="Departure date"><input name="depart" type="date" required className="input" /></Field>
+          {trip == "Round trip" ? (
+            <Field label="Return date"><input name="return" type="date" required className="input" /></Field>
+          ) : null}
+          {passengerFields}
+          <SearchButton label={label} />
+        </Row>
+      )}
     </form>
   );
 }

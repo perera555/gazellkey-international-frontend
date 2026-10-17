@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import EnquiryForm from "@/components/forms/EnquiryForm";
+import SignInGate from "@/components/site/SignInGate";
 import { DivisionInfo } from "@/lib/divisions";
 import { DIVISION_IMAGES } from "@/lib/media";
 import { getSessionUser } from "@/lib/session";
@@ -47,12 +48,20 @@ export default async function EnquirySection({
           </div>
         </div>
         <div className="rounded-3xl border border-white/20 bg-white/85 p-6 text-navy-900 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:p-8">
-          <EnquiryForm
-            division={division.key}
-            services={division.services}
-            showCompany={showCompany}
-            prefill={user ?? undefined}
-          />
+          {user == null ? (
+            <SignInGate
+              title="Create your free account to enquire"
+              text="Your enquiries and quotations are kept in your account, so you can follow every reply."
+              returnTo={`${division.href}#enquire`}
+            />
+          ) : (
+            <EnquiryForm
+              division={division.key}
+              services={division.services}
+              showCompany={showCompany}
+              prefill={user}
+            />
+          )}
         </div>
       </div>
     </section>

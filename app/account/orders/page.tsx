@@ -21,7 +21,7 @@ export default async function MyOrdersPage({ searchParams }: PageProps<"/account
     <>
       <AccountHeading
         title="Orders & bookings"
-        text="Created when you accept a quotation. Shipments show live tracking milestones."
+        text="Created when you accept a quotation or buy from our online shop. Shipments show live tracking milestones."
       />
       {!orders.ok ? (
         <ErrorNote message={orders.message} />

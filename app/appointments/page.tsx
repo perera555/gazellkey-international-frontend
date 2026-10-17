@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppointmentForm from "@/components/forms/AppointmentForm";
 import PageHero from "@/components/site/PageHero";
+import SignInGate from "@/components/site/SignInGate";
 import { isDivision } from "@/lib/divisions";
 import { param } from "@/lib/format";
 import { getSessionUser, isStaff } from "@/lib/session";
@@ -24,6 +25,14 @@ export default async function AppointmentsPage({ searchParams }: PageProps<"/app
   const division = param(params.division);
   const user = await getSessionUser();
   const customer = user && !isStaff(user) ? user : null;
+
+  // after registering / signing in, come back here with the same choices
+  const query = new URLSearchParams();
+  for (const key of ["division", "service", "subject", "enquiry"]) {
+    const value = param(params[key]);
+    if (value) query.set(key, value);
+  }
+  const returnTo = `/appointments${query.size > 0 ? `?${query}` : ""}#book`;
 
   return (
     <>
@@ -67,14 +76,22 @@ export default async function AppointmentsPage({ searchParams }: PageProps<"/app
             </div>
           </div>
           <div id="book" className="card scroll-mt-36 p-6 sm:p-8">
-            <AppointmentForm
-              defaultDivision={isDivision(division) ? division : undefined}
-              defaultService={param(params.service)}
-              defaultSubject={param(params.subject)}
-              enquiryId={customer ? param(params.enquiry) : undefined}
-              prefill={customer ?? undefined}
-              signedIn={customer != null}
-            />
+            {user == null ? (
+              <SignInGate
+                title="Create your free account to book"
+                text="Bookings are kept in your account, so you can see, change or cancel them any time."
+                returnTo={returnTo}
+              />
+            ) : (
+              <AppointmentForm
+                defaultDivision={isDivision(division) ? division : undefined}
+                defaultService={param(params.service)}
+                defaultSubject={param(params.subject)}
+                enquiryId={customer ? param(params.enquiry) : undefined}
+                prefill={customer ?? undefined}
+                signedIn={customer != null}
+              />
+            )}
           </div>
         </div>
       </section>

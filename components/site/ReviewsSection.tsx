@@ -55,7 +55,7 @@ export default async function ReviewsSection({
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[22rem_1fr]">
           {/* Summary + write a review */}
-          <aside className="space-y-6 lg:sticky lg:top-36 lg:self-start">
+          <aside className="space-y-6 lg:sticky lg:top-28 lg:self-start">
             <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-navy-900 to-navy-950 p-7 text-white shadow-[0_30px_60px_-30px_rgba(6,11,26,0.8)]">
               <div className="grid-floor opacity-40" aria-hidden="true" />
               <div className="relative">

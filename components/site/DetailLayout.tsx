@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
+import ShareButtons from "@/components/site/ShareButtons";
 import Tilt from "@/components/site/Tilt";
+import { SITE_URL } from "@/lib/social";
 
 // Two-column layout of every catalogue detail page:
 // gallery + description on the left, facts + enquiry box on the right.
@@ -9,6 +11,7 @@ export default function DetailLayout({
   fallbackImage,
   main,
   aside,
+  sharePath,
 }: {
   color?: string;
   title: string;
@@ -16,6 +19,7 @@ export default function DetailLayout({
   fallbackImage: string; // site photo when the listing has none
   main: ReactNode;
   aside: ReactNode;
+  sharePath?: string; // e.g. "/travel/ella-3-days": adds the "Share" buttons
 }) {
   return (
     <div className="bg-[#f8f9fb]">
@@ -24,7 +28,14 @@ export default function DetailLayout({
           <Gallery title={title} images={images.length > 0 ? images : [fallbackImage]} />
           <div className="card space-y-8 p-6 sm:p-8">{main}</div>
         </div>
-        <aside className="space-y-6 lg:sticky lg:top-36 lg:self-start">{aside}</aside>
+        <aside className="space-y-6 lg:sticky lg:top-28 lg:self-start">
+          {aside}
+          {sharePath ? (
+            <div className="card p-6">
+              <ShareButtons url={`${SITE_URL}${sharePath}`} title={title} />
+            </div>
+          ) : null}
+        </aside>
       </div>
     </div>
   );

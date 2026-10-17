@@ -49,34 +49,42 @@ export default function ItemCard({
               {title}
             </span>
           )}
-          <span className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/30 to-transparent" />
+          <span className="absolute inset-0 bg-linear-to-t from-navy-950/55 via-navy-950/0 to-transparent transition duration-500 group-hover:from-navy-950/35" />
+          {/* division colour accent along the top of the photo */}
+          <span className="absolute inset-x-0 top-0 h-1" style={{ background: color }} aria-hidden="true" />
           {badge ? (
-            <span className="badge absolute top-3 left-3 bg-gold-500 font-semibold text-navy-950 shadow-md">{badge}</span>
+            <span className="badge absolute top-4 left-4 bg-gold-500 px-3 py-1 font-semibold text-navy-950 shadow-md">{badge}</span>
           ) : null}
           {eyebrow ? (
-            <span className="badge absolute bottom-3 left-3 bg-white/85 px-3 py-1 text-navy-900 shadow-sm backdrop-blur">
+            <span className="badge absolute bottom-4 left-4 bg-white/90 px-3 py-1 font-semibold text-navy-900 shadow-sm backdrop-blur">
               {eyebrow}
             </span>
           ) : null}
         </div>
-        <div className="flex flex-1 flex-col p-5">
-          <h3 className="text-lg font-semibold tracking-tight text-navy-950 transition group-hover:text-gold-500">{title}</h3>
+        <div className="flex flex-1 flex-col p-5 sm:p-6">
+          <h3 className="text-lg leading-snug font-bold tracking-tight text-navy-950 transition group-hover:text-gold-600">{title}</h3>
           {detailList.length > 0 ? (
             <div className="mt-3 flex flex-wrap gap-1.5">
               {detailList.map((detail, index) => (
-                <span key={index}className="rounded-full border border-slate-200 px-2.5 py-0.5 text-xs text-slate-600">
+                <span key={index} className="rounded-full bg-navy-50 px-2.5 py-1 text-xs font-medium text-slate-600">
                   {detail}
                 </span>
               ))}
             </div>
           ) : null}
-          <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-            {price ? <p className="font-bold text-navy-950">{price}</p> : <span />}
-            <span className="inline-flex items-center gap-1 text-sm font-medium text-gold-500 transition group-hover:gap-1.5">
-              {action}
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                <path d="M7 17L17 7M8 7h9v9" />
-              </svg>
+          <div className="mt-auto flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
+            {price ? (
+              <p className="text-base font-extrabold tracking-tight whitespace-nowrap text-navy-950">{price}</p>
+            ) : (
+              <span />
+            )}
+            <span className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-navy-800" title={action}>
+              <span className="sr-only">{action}</span>
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-navy-950 text-gold-400 transition duration-300 group-hover:rotate-45 group-hover:bg-gold-500 group-hover:text-navy-950">
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <path d="M7 17L17 7M8 7h9v9" />
+                </svg>
+              </span>
             </span>
           </div>
         </div>

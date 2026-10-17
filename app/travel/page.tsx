@@ -8,6 +8,11 @@ import GallerySection from "@/components/site/GallerySection";
 import ReviewsSection from "@/components/site/ReviewsSection";
 import { FlightSearch } from "@/components/site/HeroSearch";
 import ItemCard from "@/components/site/ItemCard";
+import ListTable from "@/components/site/ListTable";
+import DambadivaSection from "@/components/site/DambadivaSection";
+import PlacePicker from "@/components/site/PlacePicker";
+import { mergePlaces, TravelPlaces } from "@/lib/places";
+import ViewToggle, { listView } from "@/components/site/ViewToggle";
 import Pagination from "@/components/site/Pagination";
 import PhotoTile from "@/components/site/PhotoTile";
 import ServiceIcon from "@/components/site/ServiceIcon";
@@ -26,7 +31,8 @@ export const metadata: Metadata = {
 const division = DIVISIONS.TRAVEL;
 
 // Services handled through an enquiry rather than a catalogue
-const SERVICES = [
+const SERVICES: { icon: string; title: string; text: string; href?: string; link?: string }[] = [
+  { icon: "hotel", title: "Hotels", text: "Beach resorts, city hotels and villas in Sri Lanka and abroad.", href: "/hotels", link: "Browse hotels →" },
   { icon: "flight", title: "Air ticketing", text: "One-way, return and multi-city fares from trusted airlines." },
   { icon: "visa", title: "Visa services", text: "Document checklists, application support and tracking until the decision." },
   { icon: "insurance", title: "Travel insurance", text: "Cover for medical, cancellation and baggage while you travel." },
@@ -34,14 +40,15 @@ const SERVICES = [
 
 export default async function TravelPage({ searchParams }: PageProps<"/travel">) {
   const params = await searchParams;
-  const [tours, countries] = await Promise.all([
+  const [tours, places] = await Promise.all([
     apiGet<Tour[]>(
       `/api/travel/tours${toQuery(params, ["tourType", "country", "search", "pageNumber"], { pageSize: "9", status: "PUBLISHED" })}`,
     ),
-    apiGet<string[]>("/api/travel/tours/countries"),
+    apiGet<TravelPlaces>("/api/travel/places"),
   ]);
   const filtered = param(params.tourType) || param(params.search) || param(params.country);
-  const countryOptions = countries.ok ? countries.data : [];
+  const view = listView(params.view);
+  const tourCountries = mergePlaces(places.ok ? places.data.tours : [], "tours");
   const currentCountry = param(params.country) ?? "";
 
   return (
@@ -65,7 +72,7 @@ export default async function TravelPage({ searchParams }: PageProps<"/travel">)
         </div>
       </section>
 
-      <section className="container-page grid gap-6 py-14 md:grid-cols-3">
+      <section className="container-page grid gap-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
         {SERVICES.map((service) => (
           <Tilt key={service.title} className="rounded-2xl">
             <div className="card flex h-full gap-4 p-6">
@@ -73,8 +80,8 @@ export default async function TravelPage({ searchParams }: PageProps<"/travel">)
               <div>
                 <h2 className="font-semibold text-navy-900">{service.title}</h2>
                 <p className="mt-1 text-sm text-slate-600">{service.text}</p>
-                <a href="#enquire" className="mt-3 inline-block text-sm font-semibold" style={{ color: division.color }}>
-                  Enquire now →
+                <a href={service.href ?? "#enquire"} className="mt-3 inline-block text-sm font-semibold" style={{ color: division.color }}>
+                  {service.link ?? "Enquire now →"}
                 </a>
               </div>
             </div>
@@ -82,39 +89,31 @@ export default async function TravelPage({ searchParams }: PageProps<"/travel">)
         ))}
       </section>
 
-      <section className="container-page pb-16">
+      {/* Dambadiva pilgrimage tours (hidden while searching) */}
+      {!filtered ? <DambadivaSection /> : null}
+
+      <section className={`container-page pb-16 ${!filtered ? "pt-16" : ""}`}>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <h2 className="heading-display text-3xl sm:text-4xl">Popular Tour Packages</h2>
-          <FilterTabs basePath="/travel" param="tourType" options={TOUR_TYPES} current={param(params.tourType)} />
+          <div className="flex flex-wrap items-center gap-3">
+            <FilterTabs basePath="/travel" param="tourType" options={TOUR_TYPES} current={param(params.tourType)} />
+            <ViewToggle basePath="/travel" searchParams={params} current={view} />
+          </div>
         </div>
 
         {/* Search tours by country and destination */}
-        <form action="/travel" className="card mt-6 grid items-end gap-3 p-4 sm:grid-cols-2 lg:flex">
+        <form action="/travel" className="card mt-6 grid items-end gap-3 p-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto]">
           {param(params.tourType) ? <input type="hidden" name="tourType" value={param(params.tourType)} /> : null}
-          <label className="block min-w-0 lg:flex-1">
-            <span className="mb-1 block text-xs font-semibold tracking-wide text-slate-500 uppercase">Country</span>
-            <select name="country" defaultValue={currentCountry} className="input">
-              <option value="">All countries</option>
-              {/* keep a typed-in country (from the home page search) selectable */}
-              {currentCountry && !countryOptions.some((c) => c.toLowerCase() == currentCountry.toLowerCase()) ? (
-                <option value={currentCountry}>{currentCountry}</option>
-              ) : null}
-              {countryOptions.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="block min-w-0 lg:flex-2">
-            <span className="mb-1 block text-xs font-semibold tracking-wide text-slate-500 uppercase">Destination or tour</span>
-            <input
-              name="search"
-              defaultValue={param(params.search) ?? ""}
-              placeholder="Phuket, Maldives, Kandy..."
-              className="input"
-            />
-          </label>
+          {view == "list" ? <input type="hidden" name="view" value="list" /> : null}
+          <PlacePicker
+            key={`${currentCountry}|${param(params.search) ?? ""}`}
+            countries={tourCountries}
+            placeParam="search"
+            placeLabel="Destination"
+            countLabel="tour"
+            defaultCountry={currentCountry}
+            defaultPlace={param(params.search) ?? ""}
+          />
           <button type="submit" className="btn-gold w-full px-8 lg:w-auto">
             Search
           </button>
@@ -132,6 +131,22 @@ export default async function TravelPage({ searchParams }: PageProps<"/travel">)
             <EmptyState
               title="No tours listed right now"
               text="We plan custom and private tours too. Tell us where you want to go."
+            />
+          ) : view == "list" ? (
+            <ListTable
+              rows={tours.data}
+              nameHeader="Tour"
+              href={(tour) => `/travel/${tour.slug}`}
+              image={(tour) => tour.images[0] ?? fallbackImage("TRAVEL")}
+              title={(tour) => tour.title}
+              subtitle={(tour) => (tour.isCustomisable ? "Customisable" : null)}
+              columns={[
+                { header: "Destination", cell: (tour) => tour.destination },
+                { header: "Country", cell: (tour) => tour.country ?? "-" },
+                { header: "Days", cell: (tour) => tour.durationDays },
+                { header: "Type", cell: (tour) => (tour.tourType == "INBOUND" ? "Sri Lanka" : "Outbound") },
+                { header: "Price", cell: (tour) => priceLabel(tour), align: "right" },
+              ]}
             />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

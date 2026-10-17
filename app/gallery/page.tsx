@@ -75,7 +75,7 @@ export default async function GalleryPage({ searchParams }: PageProps<"/gallery"
           ) : (
             <div className={destinations.length > 0 ? "grid gap-8 lg:grid-cols-[260px_1fr]" : ""}>
               {destinations.length > 0 ? (
-                <aside className="lg:sticky lg:top-36 lg:self-start">
+                <aside className="lg:sticky lg:top-28 lg:self-start">
                   <div className="card p-4">
                     <p className="eyebrow px-2">Countries & places</p>
                     <nav aria-label="Filter by destination" className="mt-3 max-h-80 overflow-y-auto lg:max-h-[calc(100vh-14rem)]">

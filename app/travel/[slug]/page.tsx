@@ -4,11 +4,13 @@ import DetailLayout, { FactList } from "@/components/site/DetailLayout";
 import DivisionHero from "@/components/site/DivisionHero";
 import EnquiryForm from "@/components/forms/EnquiryForm";
 import ReviewsSection from "@/components/site/ReviewsSection";
+import SignInGate from "@/components/site/SignInGate";
 import { apiGetItem } from "@/lib/api";
 import { DIVISIONS } from "@/lib/divisions";
 import { formatDate, priceLabel } from "@/lib/format";
 import { fallbackImage } from "@/lib/media";
 import { getSessionUser } from "@/lib/session";
+import { shareMetadata } from "@/lib/social";
 import { Tour } from "@/lib/types";
 
 const division = DIVISIONS.TRAVEL;
@@ -19,7 +21,12 @@ const getTour = cache((slug: string) =>
 
 export async function generateMetadata({ params }: PageProps<"/travel/[slug]">): Promise<Metadata> {
   const tour = await getTour((await params).slug);
-  return { title: tour.title, description: tour.summary };
+  return shareMetadata({
+    title: tour.title,
+    description: tour.summary,
+    path: `/travel/${tour.slug}`,
+    image: tour.images[0] ?? fallbackImage("TRAVEL"),
+  });
 }
 
 export default async function TourPage({ params }: PageProps<"/travel/[slug]">) {
@@ -42,6 +49,7 @@ export default async function TourPage({ params }: PageProps<"/travel/[slug]">) 
       />
       <DetailLayout
         title={tour.title}
+        sharePath={`/travel/${tour.slug}`}
         images={tour.images}
         fallbackImage={fallbackImage("TRAVEL")}
         main={
@@ -104,20 +112,31 @@ export default async function TourPage({ params }: PageProps<"/travel/[slug]">) 
                 </div>
               ) : null}
             </div>
-            <div className="card p-6">
-              <h2 className="font-semibold text-navy-900">Enquire about this tour</h2>
-              <div className="mt-4">
-                <EnquiryForm
-                  division="TRAVEL"
-                  services={division.services}
-                  defaultService={tour.tourType == "INBOUND" ? "INBOUND_TOUR" : "OUTBOUND_TOUR"}
-                  itemType="TOUR_PACKAGE"
-                  itemId={tour.id}
-                  defaultSubject={`Tour: ${tour.title}`}
-                  prefill={user ?? undefined}
-                  submitLabel="Request a quote"
+            <div id="enquire" className="card scroll-mt-36 p-6">
+              {user == null ? (
+                <SignInGate
+                  title="Sign up to request a quote"
+                  text="Create a free account to enquire about this tour and follow our reply."
+                  returnTo={`/travel/${tour.slug}#enquire`}
+                  compact
                 />
-              </div>
+              ) : (
+                <>
+                  <h2 className="font-semibold text-navy-900">Enquire about this tour</h2>
+                  <div className="mt-4">
+                    <EnquiryForm
+                      division="TRAVEL"
+                      services={division.services}
+                      defaultService={tour.tourType == "INBOUND" ? "INBOUND_TOUR" : "OUTBOUND_TOUR"}
+                      itemType="TOUR_PACKAGE"
+                      itemId={tour.id}
+                      defaultSubject={`Tour: ${tour.title}`}
+                      prefill={user}
+                      submitLabel="Request a quote"
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </>
         }

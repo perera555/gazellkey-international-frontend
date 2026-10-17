@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import EnquiryForm from "@/components/forms/EnquiryForm";
 import PageHero from "@/components/site/PageHero";
+import SignInGate from "@/components/site/SignInGate";
 import { isDivision } from "@/lib/divisions";
 import { param } from "@/lib/format";
 import { getSessionUser } from "@/lib/session";
@@ -20,6 +21,14 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
   const params = await searchParams;
   const division = param(params.division);
   const user = await getSessionUser();
+
+  // after registering / signing in, come back here with the same choices
+  const query = new URLSearchParams();
+  for (const key of ["division", "service", "subject", "message"]) {
+    const value = param(params[key]);
+    if (value) query.set(key, value);
+  }
+  const returnTo = `/contact${query.size > 0 ? `?${query}` : ""}#enquiry`;
 
   return (
     <>
@@ -67,14 +76,22 @@ export default async function ContactPage({ searchParams }: PageProps<"/contact"
             </div>
           </div>
           <div id="enquiry" className="card scroll-mt-36 p-6 sm:p-8">
-            <EnquiryForm
-              defaultDivision={isDivision(division) ? division : undefined}
-              defaultService={param(params.service)}
-              defaultSubject={param(params.subject)}
-              defaultMessage={param(params.message)}
-              showCompany
-              prefill={user ?? undefined}
-            />
+            {user == null ? (
+              <SignInGate
+                title="Create your free account to enquire"
+                text="Your enquiries and quotations are kept in your account, so you can follow every reply."
+                returnTo={returnTo}
+              />
+            ) : (
+              <EnquiryForm
+                defaultDivision={isDivision(division) ? division : undefined}
+                defaultService={param(params.service)}
+                defaultSubject={param(params.subject)}
+                defaultMessage={param(params.message)}
+                showCompany
+                prefill={user}
+              />
+            )}
           </div>
         </div>
       </section>

@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { cache } from "react";
 import DetailLayout, { FactList } from "@/components/site/DetailLayout";
 import DivisionHero from "@/components/site/DivisionHero";
+import SignInGate from "@/components/site/SignInGate";
 import EventRegistrationForm from "@/components/forms/EventRegistrationForm";
 import { apiGetItem } from "@/lib/api";
 import { DIVISIONS, EVENT_TYPES, labelOf } from "@/lib/divisions";
 import { formatDateRange, formatMoney } from "@/lib/format";
 import { fallbackImage } from "@/lib/media";
 import { getSessionUser } from "@/lib/session";
+import { shareMetadata } from "@/lib/social";
 import { EventItem } from "@/lib/types";
 
 const division = DIVISIONS.EVENTS;
@@ -18,7 +20,12 @@ const getEvent = cache((slug: string) =>
 
 export async function generateMetadata({ params }: PageProps<"/events/[slug]">): Promise<Metadata> {
   const event = await getEvent((await params).slug);
-  return { title: event.name, description: event.description.slice(0, 160) };
+  return shareMetadata({
+    title: event.name,
+    description: event.description.slice(0, 160),
+    path: `/events/${event.slug}`,
+    image: event.images[0] ?? fallbackImage("EVENTS", event.eventType),
+  });
 }
 
 export default async function EventPage({ params }: PageProps<"/events/[slug]">) {
@@ -39,6 +46,7 @@ export default async function EventPage({ params }: PageProps<"/events/[slug]">)
       />
       <DetailLayout
         title={event.name}
+        sharePath={`/events/${event.slug}`}
         images={event.images}
         fallbackImage={fallbackImage("EVENTS", event.eventType)}
         main={
@@ -75,6 +83,13 @@ export default async function EventPage({ params }: PageProps<"/events/[slug]">)
                 <p className="text-sm text-slate-600">This event has ended.</p>
               ) : !event.registrationOpen ? (
                 <p className="text-sm text-slate-600">Registration is closed for this event.</p>
+              ) : user == null ? (
+                <SignInGate
+                  title="Sign up to register"
+                  text="Create a free account to save your place and manage your registration."
+                  returnTo={`/events/${event.slug}#register`}
+                  compact
+                />
               ) : (
                 <EventRegistrationForm
                   eventId={event.id}

@@ -38,6 +38,18 @@ portal (`../gazellekey-admin`).
 | `/import`, `/export` (+ `/[sku]`) | `/api/trade/products?direction=...`   |
 | `/login`, `/register`        | `/api/auth/login`, `/api/auth/register`    |
 | `/account/*`                 | `/api/me/{enquiries,quotations,orders,...}`|
+| `/cart`                      | `POST /api/shop/checkout` (Stripe Checkout)|
+| `/checkout/success`          | `GET /api/shop/checkout?session_id=...`    |
+
+## Online shop
+
+Fixed-price gems, vehicles / spare parts and trade products show an "Add to
+cart" box. The cart lives in the browser (`lib/cart.ts`); at checkout the
+backend prices everything again, holds the stock for 30 minutes and sends the
+customer to Stripe's payment page. Stripe confirms the payment to the backend
+(webhook), the order becomes Confirmed, and the customer can download a PDF
+receipt (`/api/payments/{id}/receipt`) from the thank-you page or
+`/account/payments`. Stripe keys are set in the backend's `.env`.
 
 Customers accept, decline or ask for changes to a quotation on
 `/account/quotations` (`POST /api/quotations/{id}/respond`).

@@ -9,6 +9,9 @@ import { MyPayment } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Payments" };
 
+// Payments that have a receipt (GET /api/payments/{id}/receipt)
+const RECEIPT_STATUSES = ["PAID", "PARTIALLY_REFUNDED", "REFUNDED"];
+
 export default async function MyPaymentsPage({ searchParams }: PageProps<"/account/payments">) {
   const params = await searchParams;
   const payments = await apiGetMine<MyPayment[]>(
@@ -20,7 +23,7 @@ export default async function MyPaymentsPage({ searchParams }: PageProps<"/accou
     <>
       <AccountHeading
         title="My payments"
-        text="Bank transfers show as pending until our finance team confirms them."
+        text="Card payments are confirmed straight away. Bank transfers show as pending until our finance team confirms them. Download a receipt for any confirmed payment."
       />
       {!payments.ok ? (
         <ErrorNote message={payments.message} />
@@ -36,6 +39,15 @@ export default async function MyPaymentsPage({ searchParams }: PageProps<"/accou
               { header: "Method", cell: (row) => humanize(row.method) },
               { header: "Status", cell: (row) => <StatusBadge value={row.status} /> },
               { header: "Date", cell: (row) => formatDate(row.paidAt ?? row.createdAt), className: "whitespace-nowrap" },
+              {
+                header: "Receipt",
+                cell: (row) =>
+                  RECEIPT_STATUSES.includes(row.status) ? (
+                    <a href={`/api/payments/${row.id}/receipt?download=1`} className="font-medium text-navy-900 underline">
+                      PDF
+                    </a>
+                  ) : null,
+              },
             ]}
           />
           <Pagination pagination={payments.pagination} basePath="/account/payments" searchParams={params} />

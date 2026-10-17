@@ -8,6 +8,7 @@ import PhotoTile from "@/components/site/PhotoTile";
 import ServiceIcon from "@/components/site/ServiceIcon";
 import Tilt from "@/components/site/Tilt";
 import { apiGet } from "@/lib/api";
+import { mergePlaces, TravelPlaces } from "@/lib/places";
 import { DIVISIONS, labelOf, EVENT_TYPES, GEM_CHIPS } from "@/lib/divisions";
 import { formatDateRange, priceLabel } from "@/lib/format";
 import { CATEGORY_IMAGES, DESTINATIONS, fallbackImage, HOME_HERO_IMAGE } from "@/lib/media";
@@ -37,12 +38,13 @@ const TRADE_TILES = [
 
 export default async function HomePage() {
   // Hero text is editable by staff (content key "home.hero"); fall back to the default
-  const [hero, events, tours, gems] = await Promise.all([
+  const [hero, events, tours, gems, places] = await Promise.all([
     apiGet<ContentBlock>("/api/content/home.hero"),
     // status=PUBLISHED: signed-in staff would otherwise also get drafts
     apiGet<EventItem[]>("/api/events?pageSize=3&status=PUBLISHED"),
     apiGet<Tour[]>("/api/travel/tours?pageSize=3&status=PUBLISHED"),
     apiGet<GemItem[]>("/api/gems?pageSize=4&status=PUBLISHED"),
+    apiGet<TravelPlaces>("/api/travel/places"), // country -> place lists for the search
   ]);
 
   const heroTitle = hero.ok ? hero.data.title : "Explore the World With Gazellekey";
@@ -77,7 +79,10 @@ export default async function HomePage() {
           </h1>
           <p className="mt-6 max-w-xl text-lg text-white/70">{heroText}</p>
           <div className="mt-12 sm:mt-16">
-            <HeroSearch />
+            <HeroSearch
+              tourPlaces={mergePlaces(places.ok ? places.data.tours : [], "tours")}
+              hotelPlaces={mergePlaces(places.ok ? places.data.hotels : [], "hotels")}
+            />
           </div>
         </div>
       </section>

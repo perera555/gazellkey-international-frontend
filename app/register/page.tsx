@@ -10,13 +10,13 @@ export const metadata: Metadata = { title: "Create an account" };
 export default async function RegisterPage({ searchParams }: PageProps<"/register">) {
   const params = await searchParams;
   if (await getSessionUser()) {
-    redirect("/account");
+    redirect("/");
   }
 
   return (
     <AuthShell
-      title="Create your account"
-      text="Use the same email you enquired with and we will link your past enquiries."
+      title="Create your free account"
+      text="Register to book appointments, request quotes for tours, gems, vehicles and trade products, and register for events. Used our enquiry form before? Use the same email and we will link your past enquiries."
       wide
     >
       <RegisterForm next={param(params.next)} />

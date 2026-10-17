@@ -8,6 +8,7 @@ const PATHS: Record<string, string> = {
   trade: "M3 17h18l-2 4H5zM6 17V9h12v8M9 9V5h6v4",
   visa: "M5 3h14v18H5zM9 8h6M9 12h6M9 16h3",
   insurance: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4",
+  hotel: "M3 21V5h11v16M14 9h7v12M6 9h2M6 13h2M6 17h2M10 9h1M10 13h1M17 13h1M17 17h1M2 21h20",
 };
 
 // `color` is accepted for existing callers; the tile itself is always navy and gold

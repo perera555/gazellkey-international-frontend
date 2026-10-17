@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import TradeDetail, { getTradeProduct } from "@/components/trade/TradeDetail";
+import TradeDetail, { tradeMetadata } from "@/components/trade/TradeDetail";
 
 export async function generateMetadata({ params }: PageProps<"/import/[sku]">): Promise<Metadata> {
-  const product = await getTradeProduct("IMPORT", (await params).sku);
-  return { title: product.name, description: product.description.slice(0, 160) };
+  return tradeMetadata("IMPORT", (await params).sku);
 }
 
 export default async function ImportProductPage({ params }: PageProps<"/import/[sku]">) {

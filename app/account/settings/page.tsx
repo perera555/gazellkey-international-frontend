@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AccountHeading } from "@/components/account/AccountTable";
 import { ChangePasswordForm, LogoutButton } from "@/components/forms/AuthForms";
+import ProfilePhotoForm from "@/components/forms/ProfilePhotoForm";
 import { requireCustomer } from "@/lib/session";
 
 export const metadata: Metadata = { title: "Settings" };
@@ -14,7 +15,10 @@ export default async function SettingsPage() {
       <div className="space-y-6">
         <section className="card p-6">
           <h2 className="font-semibold text-navy-900">Profile</h2>
-          <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-[120px_1fr]">
+          <div className="mt-4">
+            <ProfilePhotoForm firstName={user.firstName} lastName={user.lastName} photoUrl={user.photoUrl} />
+          </div>
+          <dl className="mt-6 grid gap-2 text-sm sm:grid-cols-[120px_1fr]">
             <dt className="text-slate-500">Name</dt>
             <dd>{user.firstName} {user.lastName}</dd>
             <dt className="text-slate-500">Email</dt>

@@ -22,6 +22,7 @@ export interface SessionUser {
   role: Role;
   privileges: string[];
   divisions: Division[];
+  photoUrl?: string | null; // profile photo for <img src>, null = show initials
 }
 
 export interface Pagination {
@@ -51,6 +52,25 @@ export interface Tour {
   maxGroupSize: number | null;
   pricingMode: PricingMode;
   price: string | null;
+  currency: string | null;
+  images: string[];
+}
+
+export interface Hotel {
+  id: string;
+  slug: string;
+  name: string;
+  city: string;
+  country: string;
+  starRating: number | null;
+  address: string | null;
+  summary: string;
+  facilities: string[];
+  roomTypes: string[];
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  pricingMode: PricingMode;
+  price: string | null; // "from" price per night
   currency: string | null;
   images: string[];
 }
@@ -151,6 +171,7 @@ export interface TradeProduct {
   requiresPermit: boolean;
   pricingMode: PricingMode;
   price: string | null;
+  compareAtPrice: string | null; // labelled ("was") price, crossed out
   currency: string | null;
   images: string[];
 }
@@ -235,6 +256,111 @@ export interface MyPayment {
   paidAt: string | null;
   createdAt: string;
   order: { reference: string };
+}
+
+export type ShopPaymentMethod = "PAYHERE" | "STRIPE" | "BANK_TRANSFER";
+
+// Shop page "collections": retail shop products, or a division's fixed-price items
+export type ShopKind = "SHOP" | "GEMS" | "VEHICLES" | "IMPORT" | "EXPORT";
+
+// One entry of GET /api/shop/catalogue (backend lib/shop-catalogue.ts)
+export interface ShopListItem {
+  itemType: "SHOP_PRODUCT" | "GEM_ITEM" | "VEHICLE_LISTING" | "TRADE_PRODUCT";
+  itemId: string;
+  kind: ShopKind;
+  sku: string;
+  name: string;
+  category: string;
+  brand: string | null;
+  summary: string | null;
+  image: string | null;
+  price: number;
+  compareAtPrice: number | null; // only while a sale is running
+  discountPercent: number;
+  saleEndsAt: string | null;
+  currency: string;
+  unit: string;
+  stock: number | null; // null = not counted
+  minQuantity: number;
+  wholeNumbers: boolean;
+  featured: boolean;
+  createdAt: string;
+}
+
+export interface ShopCatalogueBody {
+  data: ShopListItem[];
+  categories: { name: string; count: number }[];
+  currencies: string[];
+  pagination: Pagination;
+}
+
+// GET /api/shop/products/{sku} - a retail shop product
+export interface ShopProduct {
+  id: string;
+  sku: string;
+  name: string;
+  category: string;
+  brand: string | null;
+  summary: string | null;
+  description: string;
+  highlights: string[];
+  specifications: Record<string, unknown> | null;
+  unit: string;
+  price: string;
+  currency: string;
+  stockQty: number;
+  division: Division;
+  images: string[];
+  sale: { compareAtPrice: number | null; discountPercent: number; saleEndsAt: string | null };
+}
+
+// GET /api/shop/options - payment methods switched on in the backend
+export interface ShopPaymentOption {
+  id: ShopPaymentMethod;
+  label: string;
+  description: string;
+  currencies: string[] | null; // null = every currency
+}
+
+// Our bank account, each value shown on its own line
+export interface BankTransferDetails {
+  accountName: string | null;
+  accountNumber: string | null;
+  bankName: string | null;
+  branch: string | null;
+  swiftCode: string | null;
+  bankAddress: string | null;
+  note: string | null;
+  payBefore: string;
+}
+
+// GET /api/shop/checkout?checkout=CHK-... (thank-you page)
+export interface CheckoutResult {
+  checkoutReference: string;
+  status: "PAID" | "PENDING" | "FAILED";
+  paymentMethod: ShopPaymentMethod;
+  bankTransfer: BankTransferDetails | null; // bank transfer still to be made
+  currency: string;
+  total: number;
+  orders: {
+    id: string;
+    reference: string;
+    division: Division;
+    status: string;
+    total: string;
+    currency: string;
+    paymentId: string;
+    paymentReference: string;
+    paymentStatus: string;
+    items: {
+      itemType: string | null;
+      itemId: string | null;
+      description: string;
+      quantity: string;
+      unit: string;
+      lineTotal: string;
+    }[];
+  }[];
 }
 
 export interface MyDocument extends PublicDocument {

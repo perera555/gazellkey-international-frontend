@@ -1,14 +1,16 @@
+import Link from "next/link";
 import DivisionHero from "@/components/site/DivisionHero";
 import EmptyState from "@/components/site/EmptyState";
 import EnquirySection from "@/components/site/EnquirySection";
 import ErrorNote from "@/components/site/ErrorNote";
 import FilterTabs from "@/components/site/FilterTabs";
-import ItemCard from "@/components/site/ItemCard";
-import Pagination from "@/components/site/Pagination";
+import ProductCard from "@/components/shop/ProductCard";
+import ShopPagination from "@/components/shop/ShopPagination";
 import { apiGet, toQuery } from "@/lib/api";
 import { DIVISIONS, labelOf } from "@/lib/divisions";
-import { param, priceLabel } from "@/lib/format";
-import { CATEGORY_IMAGES, fallbackImage } from "@/lib/media";
+import { param } from "@/lib/format";
+import { CATEGORY_IMAGES } from "@/lib/media";
+import { fromTradeProduct } from "@/lib/shop";
 import PhotoTile from "@/components/site/PhotoTile";
 import { TradeProduct } from "@/lib/types";
 
@@ -55,9 +57,24 @@ export default async function TradeCatalogue({
 
       <section className="container-page py-14">
         <div className="flex flex-col gap-4">
-          <h2 className="heading-display text-3xl">
-            {direction == "EXPORT" ? "Products we export" : "Products we import"}
-          </h2>
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h2 className="heading-display text-3xl">
+                {direction == "EXPORT" ? "Products we export" : "Products we import"}
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">
+                Buy fixed-price items online now, or ask for a wholesale quotation.
+              </p>
+            </div>
+            <Link href={`/shop?kind=${direction}`} className="btn-outline btn-sm">
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2" />
+                <circle cx="10" cy="20.5" r="1" />
+                <circle cx="17" cy="20.5" r="1" />
+              </svg>
+              Shop {direction == "EXPORT" ? "Ceylon produce" : "imported goods"} online
+            </Link>
+          </div>
           <FilterTabs
             basePath={division.href}
             param="category"
@@ -76,33 +93,17 @@ export default async function TradeCatalogue({
               text="We source to order. Send us your product, quantity and destination for a quotation."
             />
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
               {products.data.map((product) => (
-                <ItemCard
+                <ProductCard
                   key={product.id}
-                  href={`${division.href}/${encodeURIComponent(product.sku)}`}
-                  color={division.color}
-                  image={product.images[0]}
-                  fallbackImage={fallbackImage(direction, product.category)}
-                  eyebrow={labelOf(division.services, product.category)}
-                  title={product.name}
-                  details={[
-                    product.origin,
-                    product.minimumOrderQty
-                      ? `MOQ ${Number(product.minimumOrderQty)} ${product.unit}`
-                      : null,
-                  ]}
-                  price={
-                    product.pricingMode == "FIXED"
-                      ? `${priceLabel(product)} / ${product.unit}`
-                      : priceLabel(product)
-                  }
+                  item={fromTradeProduct(product, labelOf(division.services, product.category))}
                 />
               ))}
             </div>
           )}
           {products.ok ? (
-            <Pagination pagination={products.pagination} basePath={division.href} searchParams={searchParams} />
+            <ShopPagination pagination={products.pagination} basePath={division.href} searchParams={searchParams} />
           ) : null}
         </div>
       </section>
