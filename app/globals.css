@@ -158,12 +158,19 @@ p {
    (they stand out a little on the ivory page) */
 @utility card {
   @apply rounded-3xl border border-ivory-200 bg-white transition duration-300;
+  /* light top edge + layered shadow: the panel floats a little above the page */
   box-shadow:
-    0 1px 2px rgb(15 23 42 / 0.04),
-    0 8px 24px -16px rgb(11 21 48 / 0.12);
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 1px 2px rgb(15 23 42 / 0.05),
+    0 10px 22px -14px rgb(11 21 48 / 0.18),
+    0 26px 50px -34px rgb(11 21 48 / 0.3);
   &:is(a, .group):hover {
+    translate: 0 -4px;
     border-color: rgb(212 166 74 / 0.45);
-    box-shadow: 0 30px 60px -28px rgb(11 21 48 / 0.4);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 22px 40px -18px rgb(11 21 48 / 0.3),
+      0 46px 80px -40px rgb(11 21 48 / 0.45);
   }
 }
 
@@ -258,6 +265,81 @@ p {
 }
 .tilt:hover .tilt-glare {
   opacity: 1;
+}
+
+/* ── 3D style ──
+   card-3d: a white panel that floats - layered shadow, light top edge, lifts on hover
+   icon-3d: a glossy, lit cube for an icon (colour from --tone)
+   stage-3d: a light section with a soft perspective floor behind its content */
+.card-3d {
+  position: relative;
+  border-radius: 1.75rem;
+  border: 1px solid rgb(236 227 209 / 0.9);
+  background: linear-gradient(180deg, #ffffff 0%, #fffdf8 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 1px 2px rgb(15 23 42 / 0.05),
+    0 12px 24px -12px rgb(11 21 48 / 0.18),
+    0 30px 60px -36px rgb(11 21 48 / 0.35);
+  transition:
+    translate 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.35s,
+    border-color 0.35s;
+}
+a.card-3d:hover,
+.group:hover > .card-3d,
+.card-3d.hoverable:hover {
+  translate: 0 -6px;
+  border-color: rgb(212 166 74 / 0.55);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 2px 4px rgb(15 23 42 / 0.05),
+    0 24px 40px -18px rgb(11 21 48 / 0.28),
+    0 50px 80px -40px rgb(11 21 48 / 0.45);
+}
+.icon-3d {
+  --tone: #0b1530;
+  display: grid;
+  place-items: center;
+  border-radius: 1rem;
+  color: #fff;
+  background:
+    radial-gradient(120% 90% at 30% 15%, rgb(255 255 255 / 0.45), transparent 45%),
+    linear-gradient(145deg, color-mix(in srgb, var(--tone) 85%, white), var(--tone) 55%, color-mix(in srgb, var(--tone) 70%, black));
+  box-shadow:
+    inset 0 -3px 0 rgb(0 0 0 / 0.18),
+    inset 0 2px 0 rgb(255 255 255 / 0.35),
+    0 10px 18px -8px color-mix(in srgb, var(--tone) 70%, transparent);
+  transform: translateZ(30px);
+}
+.stage-3d {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.stage-3d::before {
+  content: "";
+  position: absolute;
+  inset: auto -20% -35% -20%;
+  height: 70%;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgb(11 21 48 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(11 21 48 / 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  transform: perspective(700px) rotateX(62deg);
+  transform-origin: top;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+.stage-3d::after {
+  content: "";
+  position: absolute;
+  inset: -30% -10% auto auto;
+  width: 46rem;
+  height: 46rem;
+  z-index: -1;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgb(212 166 74 / 0.16), transparent 65%);
 }
 
 /* Sections rise into place as they scroll into view (where supported) */

@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import BusinessShowcase from "@/components/site/BusinessShowcase";
 import GallerySection from "@/components/site/GallerySection";
+import HomeSpotlight from "@/components/site/HomeSpotlight";
+import { apiGetBody } from "@/lib/api";
 import HeroSearch from "@/components/site/HeroSearch";
 import ReviewsSection from "@/components/site/ReviewsSection";
 import ItemCard from "@/components/site/ItemCard";
 import PhotoTile from "@/components/site/PhotoTile";
-import ServiceIcon from "@/components/site/ServiceIcon";
-import Tilt from "@/components/site/Tilt";
 import { apiGet } from "@/lib/api";
 import { mergePlaces, TravelPlaces } from "@/lib/places";
 import { DIVISIONS, labelOf, EVENT_TYPES, GEM_CHIPS } from "@/lib/divisions";
@@ -18,16 +19,6 @@ import { getDictionary } from "@/lib/i18n-server";
 import { PAGE_WORDS } from "@/lib/i18n-pages";
 
 type ContentBlock = { key: string; title: string; body: { text?: string } | null };
-
-// Entry points under the hero (slide 6): one per service, in division colours
-const QUICK_LINKS = [
-  { href: "/travel#flights", icon: "flight", title: "Flight Tickets", text: "Best fares worldwide", color: DIVISIONS.TRAVEL.color },
-  { href: "/travel", icon: "tour", title: "Tour Packages", text: "Amazing destinations", color: "#00a6a6" },
-  { href: "/gems", icon: "gem", title: "Gems & Jewellery", text: "Certified natural gems", color: DIVISIONS.GEMS.color },
-  { href: "/events", icon: "event", title: "Events", text: "Shows, expos & festivals", color: DIVISIONS.EVENTS.color },
-  { href: "/vehicles", icon: "vehicle", title: "Vehicles", text: "Cars, parts & machinery", color: DIVISIONS.VEHICLES.color },
-  { href: "/export", icon: "trade", title: "Import & Export", text: "Global trade solutions", color: DIVISIONS.IMPORT.color },
-];
 
 // Trade tiles: Sri Lankan exports first, then what we import
 const TRADE_TILES = [
@@ -50,6 +41,13 @@ export default async function HomePage() {
     apiGet<GemItem[]>("/api/gems?pageSize=4&status=PUBLISHED"),
     apiGet<TravelPlaces>("/api/travel/places"), // country -> place lists for the search
   ]);
+  // live numbers for the spotlight band
+  const [openJobs, fertilizer] = await Promise.all([
+    apiGet<{ country: string }[]>("/api/jobs/vacancies?view=public&pageSize=100"),
+    apiGetBody<{ data: { price: number; currency: string }[] }>("/api/shop/catalogue?category=Fertilizer&sort=price-asc&pageSize=1"),
+  ]);
+  const jobList = openJobs.ok ? openJobs.data : [];
+  const fertilizerPrice = fertilizer.ok ? (fertilizer.body.data[0] ?? null) : null;
 
   const w = PAGE_WORDS[lang].home;
   // staff can edit the English hero text in the admin; other languages use ours
@@ -90,22 +88,16 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Quick links */}
-      <section className="relative border-b border-ivory-200 bg-ivory-50 pt-12 pb-16">
-        <div className="container-page grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-          {QUICK_LINKS.map((link, index) => (
-            <Tilt key={link.title} className="rounded-2xl">
-              <Link href={link.href} className="card group flex h-full flex-col items-start gap-4 p-5">
-                <ServiceIcon name={link.icon} color={link.color} />
-                <span>
-                  <span className="block font-semibold tracking-tight text-navy-950 transition group-hover:text-gold-500">{w.quick[index].title}</span>
-                  <span className="mt-1 block text-sm text-slate-500">{w.quick[index].text}</span>
-                </span>
-              </Link>
-            </Tilt>
-          ))}
-        </div>
-      </section>
+      {/* Every business as 3D tiles */}
+      <BusinessShowcase lang={lang} />
+
+      {/* Work visa + fertilizer, why choose us */}
+      <HomeSpotlight
+        lang={lang}
+        jobs={jobList.length}
+        countries={new Set(jobList.map((job) => job.country)).size}
+        fertilizer={fertilizerPrice ? { price: Number(fertilizerPrice.price), currency: fertilizerPrice.currency } : null}
+      />
 
       {/* Tours */}
       <section className="reveal container-page py-20">

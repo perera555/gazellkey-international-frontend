@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { AboutCta, AboutValues } from "@/components/site/AboutValues";
+import BusinessShowcase from "@/components/site/BusinessShowcase";
 import LeadershipSection from "@/components/site/LeadershipSection";
 import PageHero from "@/components/site/PageHero";
 import PhotoTile from "@/components/site/PhotoTile";
@@ -55,24 +57,13 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-navy-50 py-20">
-        <div className="container-page">
-          <h2 className="heading-display text-3xl sm:text-4xl">{w.about.divisions}</h2>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {DIVISION_LIST.map((division) => (
-              <PhotoTile
-                key={division.key}
-                href={division.href}
-                image={DIVISION_IMAGES[division.key]}
-                title={w.divisionNames[division.key]}
-                text={division.tagline}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+      <AboutValues lang={lang} />
+
+      <BusinessShowcase lang={lang} />
 
       <LeadershipSection variant="about" />
+
+      <AboutCta lang={lang} />
     </>
   );
 }
