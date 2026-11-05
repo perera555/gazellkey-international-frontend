@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useCart } from "@/components/shop/useCart";
 import { addToCart, CartItem, cartKey } from "@/lib/cart";
 
@@ -18,6 +19,7 @@ export default function QuickAdd({ item }: { item: Omit<CartItem, "quantity"> })
     event.stopPropagation();
     addToCart({ ...item, quantity: item.min });
     setAdded(true);
+    toast.success(`${item.name} added to your cart`);
     setTimeout(() => setAdded(false), 1800);
   }
 

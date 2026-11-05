@@ -16,9 +16,26 @@ export const SOCIAL_LINKS = {
 // e.g. "94771234567". Shows the green chat button. "" hides it.
 export const WHATSAPP_NUMBER = "";
 
+// Company details shown to search engines (the company panel next to search
+// results). Leave "" for anything you do not want to publish.
+export const COMPANY = {
+  name: "Gazellekey International",
+  legalName: "Gazellekey International (Pvt) Ltd",
+  phone: "", // e.g. "+94 11 234 5678"
+  email: "", // e.g. "info@gazellekey.com"
+  streetAddress: "", // e.g. "25 Galle Road"
+  city: "", // e.g. "Colombo 03"
+  country: "LK",
+};
+
 // The public address of this website, used in link previews on Facebook,
 // WhatsApp, LinkedIn etc. Set NEXT_PUBLIC_SITE_URL in .env.local when live.
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3002").replace(/\/$/, "");
+
+// Search engines (Google, Bing ...) may list the website only when
+// NEXT_PUBLIC_SEARCH_INDEXING="on" in .env.local. Keep it off while testing on a
+// temporary address; switch it on when the site is ready for customers.
+export const SEARCH_INDEXING = process.env.NEXT_PUBLIC_SEARCH_INDEXING == "on";
 // ───────────────────────────────────────────────────────
 
 export type SocialNetwork = keyof typeof SOCIAL_LINKS | "whatsapp";

@@ -2,6 +2,7 @@
 
 import { DragEvent, FormEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { formatFileSize } from "@/lib/format";
 
 const MAX_SIZE = 10 * 1024 * 1024; // same limit as the API (lib/storage.ts)
@@ -107,23 +108,24 @@ export default function DocumentUploadForm({ targets }: { targets: UploadTarget[
               ? "Uploaded. Our team will check it and you will see the result below."
               : "Uploaded. You can see it in the list below.",
         });
+        toast.success("Document uploaded.");
         setFile(null);
         setTitle("");
         setType("");
         router.refresh();
       } else {
-        setMessage({
-          ok: false,
-          text:
-            request.status == 401
-              ? "Please sign in again to upload."
-              : (body.message ?? "The upload did not work. Please try again."),
-        });
+        const text =
+          request.status == 401
+            ? "Please sign in again to upload."
+            : (body.message ?? "The upload did not work. Please try again.");
+        setMessage({ ok: false, text: text });
+        toast.error(text);
       }
     };
     request.onerror = () => {
       setProgress(null);
       setMessage({ ok: false, text: "Network error. Please check your connection." });
+      toast.error("Network error. Please check your connection.");
     };
     setProgress(0);
     request.send(form);

@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import LeadershipSection from "@/components/site/LeadershipSection";
 import PageHero from "@/components/site/PageHero";
 import PhotoTile from "@/components/site/PhotoTile";
 import { LogoMark } from "@/components/site/Logo";
 import { apiGet } from "@/lib/api";
 import { DIVISION_LIST } from "@/lib/divisions";
 import { DIVISION_IMAGES } from "@/lib/media";
+import { getDictionary } from "@/lib/i18n-server";
+import { PAGE_WORDS } from "@/lib/i18n-pages";
 
 export const metadata: Metadata = { title: "About us" };
 
@@ -19,17 +22,19 @@ const DEFAULT_PARAGRAPHS = [
 
 export default async function AboutPage() {
   // Editable by staff as content key "about.page"
-  const content = await apiGet<ContentBlock>("/api/content/about.page");
-  const body = content.ok ? content.data.body : null;
+  const [content, { lang }] = await Promise.all([apiGet<ContentBlock>("/api/content/about.page"), getDictionary()]);
+  const w = PAGE_WORDS[lang];
+  // staff can edit the English text in the admin; other languages use ours
+  const body = lang == "en" && content.ok ? content.data.body : null;
   const paragraphs =
-    body?.paragraphs ?? (typeof body?.text == "string" ? body.text.split(/\n\s*\n/) : DEFAULT_PARAGRAPHS);
+    body?.paragraphs ?? (typeof body?.text == "string" ? body.text.split(/\n\s*\n/) : lang == "en" ? DEFAULT_PARAGRAPHS : w.about.paragraphs);
 
   return (
     <>
       <PageHero
-        eyebrow="About us"
-        title={content.ok ? content.data.title : "About Gazellekey"}
-        text="One platform. Six business divisions. Global opportunities."
+        eyebrow={w.about.eyebrow}
+        title={lang == "en" && content.ok ? content.data.title : w.about.title}
+        text={w.about.text}
         image="/images/travel-sigiriya.jpg"
       />
 
@@ -38,7 +43,7 @@ export default async function AboutPage() {
           {paragraphs.map((paragraph, index) => (
             <p key={index}>{paragraph}</p>
           ))}
-          <Link href="/contact" className="btn-gold mt-4">Talk to us</Link>
+          <Link href="/contact" className="btn-gold mt-4">{w.about.talkToUs}</Link>
         </div>
         <div className="relative mx-auto aspect-square w-full max-w-md">
           <div className="absolute inset-6 overflow-hidden rounded-4xl border-4 border-white shadow-[0_40px_80px_-40px_rgba(11,37,69,0.7)] transform-[perspective(900px)_rotateY(-10deg)_rotateX(4deg)]">
@@ -52,20 +57,22 @@ export default async function AboutPage() {
 
       <section className="bg-navy-50 py-20">
         <div className="container-page">
-          <h2 className="heading-display text-3xl sm:text-4xl">Our divisions</h2>
+          <h2 className="heading-display text-3xl sm:text-4xl">{w.about.divisions}</h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {DIVISION_LIST.map((division) => (
               <PhotoTile
                 key={division.key}
                 href={division.href}
                 image={DIVISION_IMAGES[division.key]}
-                title={division.name}
+                title={w.divisionNames[division.key]}
                 text={division.tagline}
               />
             ))}
           </div>
         </div>
       </section>
+
+      <LeadershipSection variant="about" />
     </>
   );
 }

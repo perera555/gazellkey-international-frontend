@@ -55,7 +55,7 @@ export default async function ReviewsPage({ searchParams }: PageProps<"/reviews"
         image="/images/travel-maldives.jpg"
       />
 
-      <section className="bg-linear-to-b from-navy-50 to-white">
+      <section className="bg-linear-to-b from-navy-50 to-ivory-100">
         <div className="container-page py-14">
           {!result.ok ? (
             <ErrorNote message={result.message} />

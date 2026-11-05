@@ -43,7 +43,7 @@ export default async function AppointmentsPage({ searchParams }: PageProps<"/app
         image="/images/events-conference.jpg"
       />
 
-      <section className="bg-linear-to-b from-navy-50 to-white">
+      <section className="bg-linear-to-b from-navy-50 to-ivory-100">
         <div className="container-page grid gap-10 py-16 lg:grid-cols-[1fr_2fr]">
           <div className="space-y-6 text-slate-700">
             <div>

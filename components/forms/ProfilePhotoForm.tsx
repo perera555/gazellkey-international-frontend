@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import Avatar, { sharpPhotoUrl } from "@/components/site/Avatar";
 import { apiRequest } from "@/lib/api-client";
 
@@ -46,12 +47,15 @@ export default function ProfilePhotoForm({
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
         setError(data.message ?? "Could not upload the photo.");
+        toast.error(data.message ?? "Could not upload the photo.");
       } else {
         setCurrent(data.photoUrl ?? null);
+        toast.success("Profile photo updated.");
         router.refresh(); // header picks up the new photo
       }
     } catch {
       setError("Network error. Please check your connection.");
+      toast.error("Network error. Please check your connection.");
     }
     setBusy(false);
   }
@@ -66,6 +70,7 @@ export default function ProfilePhotoForm({
       return;
     }
     setCurrent(null);
+    toast.success("Profile photo removed.");
     router.refresh();
   }
 

@@ -260,6 +260,48 @@ export interface MyPayment {
 
 export type ShopPaymentMethod = "PAYHERE" | "STRIPE" | "BANK_TRANSFER";
 
+// ─────────────── Rentals (backend lib/rentals.ts) ───────────────
+
+export interface RentalItem {
+  id: string;
+  sku: string;
+  name: string;
+  category: string;
+  description: string;
+  highlights: string[];
+  specifications: Record<string, unknown> | null;
+  unit: string;
+  pricePerDay: string;
+  currency: string;
+  quantityOwned: number;
+  minQuantity: number;
+  deposit: string | null;
+  featured: boolean;
+  images: string[];
+}
+
+export type RentalStatus = "REQUESTED" | "CONFIRMED" | "DELIVERED" | "RETURNED" | "CANCELLED";
+
+// GET /api/me/rentals
+export interface MyRental {
+  id: string;
+  reference: string;
+  status: RentalStatus;
+  eventType: string;
+  startDate: string; // "2026-11-14T00:00:00.000Z" = that calendar day
+  endDate: string;
+  venue: string;
+  city: string;
+  needsDelivery: boolean;
+  needsSetup: boolean;
+  currency: string;
+  estimatedTotal: string;
+  quotedTotal: string | null;
+  cancelReason: string | null;
+  createdAt: string;
+  items: { id: string; name: string; quantity: number; lineTotal: string }[];
+}
+
 // Shop page "collections": retail shop products, or a division's fixed-price items
 export type ShopKind = "SHOP" | "GEMS" | "VEHICLES" | "IMPORT" | "EXPORT";
 

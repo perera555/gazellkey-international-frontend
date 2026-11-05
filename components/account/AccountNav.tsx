@@ -9,6 +9,8 @@ const LINKS = [
   { href: "/account/appointments", label: "Appointments" },
   { href: "/account/quotations", label: "Quotations" },
   { href: "/account/orders", label: "Orders & bookings" },
+  { href: "/account/rentals", label: "Rentals" },
+  { href: "/account/jobs", label: "My work visa" },
   { href: "/account/payments", label: "Payments" },
   { href: "/account/travel", label: "Travel & events" },
   { href: "/account/documents", label: "Documents" },

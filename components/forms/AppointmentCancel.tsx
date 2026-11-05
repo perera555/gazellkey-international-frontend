@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { apiRequest } from "@/lib/api-client";
 
 // Customer cancels their own upcoming appointment
@@ -25,6 +26,7 @@ export default function AppointmentCancel({ appointmentId }: { appointmentId: st
       return;
     }
     setOpen(false);
+    toast.success("Appointment cancelled.");
     router.refresh();
   }
 

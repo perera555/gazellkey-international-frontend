@@ -3,8 +3,7 @@ import { CartItem } from "@/lib/cart";
 import { fallbackImage } from "@/lib/media";
 import { ShopKind, ShopListItem, TradeProduct } from "@/lib/types";
 
-// What a product card shows. price null = "Price on request" (no online
-// purchase), used by the Import / Export pages for wholesale items.
+// What a product card shows. price null = "Price on request" (no online purchase).
 export type ShopCardItem = Omit<ShopListItem, "price"> & {
   price: number | null;
   fallbackImage?: string;
@@ -21,35 +20,6 @@ export function labelledPrice(product: TradeProduct) {
     return null;
   }
   return { labelled: labelled, percent: Math.round(((labelled - price) / labelled) * 100) };
-}
-
-// An Import / Export product as a shop card
-export function fromTradeProduct(product: TradeProduct, categoryLabel: string): ShopCardItem {
-  const fixed = product.pricingMode == "FIXED" && product.price != null && product.currency != null;
-  const sale = labelledPrice(product);
-  return {
-    itemType: "TRADE_PRODUCT",
-    itemId: product.id,
-    kind: product.direction,
-    sku: product.sku,
-    name: product.name,
-    category: categoryLabel,
-    brand: null,
-    summary: product.origin ? `From ${product.origin}` : product.packaging,
-    image: product.images[0] ?? null,
-    fallbackImage: fallbackImage(product.direction, product.category),
-    price: fixed ? Number(product.price) : null,
-    compareAtPrice: sale?.labelled ?? null,
-    discountPercent: sale?.percent ?? 0,
-    saleEndsAt: null,
-    currency: product.currency ?? "",
-    unit: product.unit,
-    stock: product.stockQty == null ? null : Number(product.stockQty),
-    minQuantity: product.minimumOrderQty == null ? 1 : Number(product.minimumOrderQty),
-    wholeNumbers: false,
-    featured: false,
-    createdAt: "",
-  };
 }
 
 export const SHOP_SORTS = [

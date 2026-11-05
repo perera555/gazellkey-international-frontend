@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { apiRequest } from "@/lib/api-client";
 
 type Action = "ACCEPT" | "REJECT" | "REQUEST_CHANGES";
@@ -40,6 +41,9 @@ export default function QuotationActions({ quotationId }: { quotationId: string 
     });
     if (result.ok) {
       setNote("");
+      toast.success(
+        action == "ACCEPT" ? "Quotation accepted." : action == "REJECT" ? "Quotation declined." : "Change request sent.",
+      );
       router.refresh();
     }
   }

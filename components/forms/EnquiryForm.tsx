@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import toast from "react-hot-toast";
 import { apiRequest } from "@/lib/api-client";
 import { DIVISION_LIST, Option } from "@/lib/divisions";
 import { Division } from "@/lib/types";
@@ -63,6 +64,7 @@ export default function EnquiryForm(props: Props) {
     setSending(false);
     if (result.ok) {
       setReference(result.data.reference ?? "received");
+      toast.success(result.data.reference ? `Enquiry ${result.data.reference} sent` : "Enquiry sent");
     } else {
       setError(result.data.message ?? "Could not send your enquiry.");
     }

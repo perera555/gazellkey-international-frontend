@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useCart } from "@/components/shop/useCart";
 import { addToCart, CartItem, cartKey, clampQuantity } from "@/lib/cart";
 import { formatMoney } from "@/lib/format";
@@ -21,6 +22,7 @@ export default function AddToCart({ item }: { item: Omit<CartItem, "quantity"> }
     addToCart({ ...item, quantity: value });
     setQuantity(String(item.min));
     setAdded(true);
+    toast.success(`${item.name} added to your cart`);
   }
 
   return (

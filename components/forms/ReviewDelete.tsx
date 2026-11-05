@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { apiRequest } from "@/lib/api-client";
 
 // Customer deletes their own review (DELETE /api/reviews/{id})
@@ -22,6 +23,7 @@ export default function ReviewDelete({ reviewId }: { reviewId: string }) {
       setError(result.data.message ?? "Could not delete the review.");
       return;
     }
+    toast.success("Review deleted.");
     router.refresh();
   }
 

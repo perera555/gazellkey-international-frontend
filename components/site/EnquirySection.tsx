@@ -12,11 +12,17 @@ export default async function EnquirySection({
   heading,
   text,
   showCompany,
+  returnTo,
+  defaultService,
+  defaultSubject,
 }: {
   division: DivisionInfo;
   heading?: string;
   text?: string;
   showCompany?: boolean;
+  returnTo?: string; // page to come back to after signing in (default: the division page)
+  defaultService?: string;
+  defaultSubject?: string;
 }) {
   const user = await getSessionUser();
   return (
@@ -52,13 +58,15 @@ export default async function EnquirySection({
             <SignInGate
               title="Create your free account to enquire"
               text="Your enquiries and quotations are kept in your account, so you can follow every reply."
-              returnTo={`${division.href}#enquire`}
+              returnTo={returnTo ?? `${division.href}#enquire`}
             />
           ) : (
             <EnquiryForm
               division={division.key}
               services={division.services}
               showCompany={showCompany}
+              defaultService={defaultService}
+              defaultSubject={defaultSubject}
               prefill={user}
             />
           )}

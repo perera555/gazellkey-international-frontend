@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { apiRequest } from "@/lib/api-client";
 
 // FR-EVT-03 / FR-EVT-07: registration with one or more participants
@@ -47,6 +48,7 @@ export default function EventRegistrationForm({
     setSending(false);
     if (result.ok) {
       setDone({ reference: result.data.reference, message: result.data.message ?? "Registered" });
+      toast.success("You are registered for the event.");
       router.refresh(); // update "seats left"
     } else {
       setError(result.data.message ?? "Registration failed.");

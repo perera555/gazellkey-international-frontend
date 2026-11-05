@@ -4,12 +4,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { isActive, NavDivision, NavIcon, NavLink } from "@/components/site/NavBar";
+import LanguageSwitcher from "@/components/jobs/LanguageSwitcher";
+import { Lang } from "@/lib/i18n";
+import { NavWords } from "@/lib/i18n-nav";
 
 export default function MobileNav({
   links,
   divisions,
   accountLink,
+  words,
+  lang,
+  hideClass,
 }: {
+  hideClass: string; // hidden where the full menu bar is shown (Header)
+  words: NavWords;
+  lang: Lang;
   links: NavLink[];
   divisions: NavDivision[];
   accountLink: NavLink;
@@ -27,12 +36,12 @@ export default function MobileNav({
   }, [open]);
 
   return (
-    <div className="xl:hidden">
+    <div data-menu-toggle className={hideClass}>
       <button
         type="button"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        aria-label={open ? "Close menu" : "Open menu"}
+        aria-label={open ? words.closeMenu : words.openMenu}
         className="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white transition hover:border-gold-500/60 hover:text-gold-400"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -42,6 +51,9 @@ export default function MobileNav({
 
       {open && (
         <div className="dropdown-in absolute inset-x-0 top-full h-[calc(100dvh-6rem)] overflow-y-auto border-t border-white/10 bg-navy-950 px-4 pt-4 pb-10 sm:px-6">
+          <div className="mb-4 px-1">
+            <LanguageSwitcher lang={lang} label={words.language} dark />
+          </div>
           <nav aria-label="Main" className="grid gap-1">
             {[...links, accountLink].map((link) => (
               <Link
@@ -57,7 +69,7 @@ export default function MobileNav({
             ))}
           </nav>
 
-          <p className="eyebrow mt-8 px-4">Divisions</p>
+          <p className="eyebrow mt-8 px-4">{words.divisions}</p>
           <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
             {divisions.map((division) => (
               <Link

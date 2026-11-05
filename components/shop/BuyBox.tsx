@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useCart } from "@/components/shop/useCart";
 import { addToCart, CartItem, cartKey, clampQuantity } from "@/lib/cart";
 import { formatMoney } from "@/lib/format";
@@ -23,6 +24,7 @@ export default function BuyBox({ item }: { item: Omit<CartItem, "quantity"> }) {
   function add() {
     addToCart({ ...item, quantity: quantity });
     setAdded(true);
+    toast.success(`${quantity} × ${item.name} added to your cart`);
   }
 
   function buyNow() {

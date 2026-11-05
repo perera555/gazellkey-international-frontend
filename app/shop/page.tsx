@@ -69,7 +69,7 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
             Handpicked from Sri Lanka <span className="text-gold-gradient">and beyond</span>
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-white/70">
-            Ceylon tea and spices, certified gems, genuine parts and everyday finds. Order online and pay securely.
+            Ceylon tea and spices, certified gems, genuine parts and everyday finds - buy one or a few, order online and pay securely.
           </p>
           <form action="/shop" className="mt-8 flex max-w-2xl items-center gap-2 rounded-full bg-white p-1.5 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)]">
             {current.kind ? <input type="hidden" name="kind" value={current.kind} /> : null}
@@ -194,8 +194,29 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
         </div>
       </section>
 
+      {/* ── Business buyers go to the wholesale pages ── */}
+      <section className="container-page pb-12">
+        <div className="grid gap-5 rounded-3xl bg-navy-950 p-6 text-white sm:p-8 md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <p className="eyebrow">For businesses</p>
+            <h2 className="mt-2 text-2xl font-bold">Buying in bulk for your shop or company?</h2>
+            <p className="mt-1 max-w-2xl text-white/70">
+              Our Import and Export teams supply wholesale quantities with volume pricing, sourcing, shipping and customs handled for you.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/import" className="btn-gold">
+              Wholesale import
+            </Link>
+            <Link href="/export" className="btn-glass">
+              Bulk export
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ── Why shop with us ── */}
-      <section className="border-t border-slate-200 bg-white">
+      <section className="border-t border-ivory-200 bg-ivory-50">
         <div className="container-page grid gap-6 py-12 sm:grid-cols-2 lg:grid-cols-4">
           {PERKS.map((perk) => (
             <div key={perk.title} className="flex items-start gap-4">

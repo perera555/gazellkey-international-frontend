@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { Star } from "@/components/site/Stars";
 import { apiRequest } from "@/lib/api-client";
 import { Division } from "@/lib/types";
@@ -56,6 +57,7 @@ export default function ReviewForm({
       return;
     }
     setDone(true);
+    toast.success("Thank you! Your review is posted.");
     router.refresh();
   }
 

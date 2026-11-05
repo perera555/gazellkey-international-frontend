@@ -7,7 +7,7 @@ import PrintButton from "@/components/site/PrintButton";
 export const metadata: Metadata = {
   title: "User guide",
   description:
-    "How to use the Gazellekey website: create an account, send enquiries, book appointments, accept quotations, shop online, pay, upload documents and more.",
+    "How to use the Gazellekey website: create an account, apply for work visa jobs abroad, shop online, hire event equipment, send enquiries, book appointments, accept quotations, pay, upload documents and more.",
 };
 
 type Section = {
@@ -28,8 +28,8 @@ const SECTIONS: Section[] = [
     intro:
       "Gazellekey International brings six divisions together on one website: Travel, Events, Gems & Jewellery, Vehicles & Machinery, Import and Export. Anyone can look around - no account needed.",
     steps: [
-      <>Browse tours, events, gems, vehicles and trade products, the <Link href="/gallery">gallery</Link> and <Link href="/reviews">customer reviews</Link> freely.</>,
-      <>To <b>send an enquiry, book an appointment, register for an event or buy online</b>, create a free account first. The website shows you a sign-in box in those places.</>,
+      <>Browse tours, events, gems, vehicles and trade products, the <Link href="/shop">Shop</Link>, <Link href="/rentals">event rentals</Link>, the <Link href="/gallery">gallery</Link> and <Link href="/reviews">customer reviews</Link> freely.</>,
+      <>To <b>send an enquiry, book an appointment, register for an event, hire equipment or buy online</b>, create a free account first. The website shows you a sign-in box in those places. Applying for a <b>job abroad</b> needs no account.</>,
       <>After signing up you come straight back to the page you were on, with your choices kept.</>,
     ],
   },
@@ -40,11 +40,13 @@ const SECTIONS: Section[] = [
     intro: "Your account keeps all your enquiries, bookings, payments and documents in one place.",
     steps: [
       <>Click <b>Create account</b> (top right), or go to <Link href="/register">Create an account</Link>.</>,
-      <>Enter your name, email, phone (optional) and a password - or click <b>Sign up with Google</b> to use your Google account.</>,
+      <>Enter your name, email, phone (optional) and a password of at least 8 characters - or click <b>Sign up with Google</b> to use your Google account. The <b>eye</b> button in the password box shows what you typed.</>,
       <>You are signed in straight away. Next time, use <Link href="/login">Sign in</Link> with the same email and password, or <b>Continue with Google</b>.</>,
+      <>Tick <b>Remember me for 30 days</b> on your own phone or computer to stay signed in. Leave it empty on shared computers - you are signed out when the browser closes.</>,
       <>When you are signed in, your photo and a green <b>Online</b> dot appear in the top right. Click it for your account menu and <b>Sign out</b>.</>,
     ],
     tips: [
+      "When your browser asks “Save password?”, click Save - it fills in your email and password next time.",
       "Used our enquiry form before you had an account? Register with the same email and we link your earlier enquiries to it.",
       "Forgot your password? Contact us and our team will help you get back in.",
     ],
@@ -56,9 +58,26 @@ const SECTIONS: Section[] = [
     intro: "The menu at the top is the same on every page.",
     steps: [
       <><b>Divisions</b> opens a panel with all six divisions. Click one to see its services, catalogue and prices.</>,
+      <><b>Work visa</b> lists jobs abroad - click it for the page, or point at it to see the countries and jobs. <b>Shop</b> lists everything you can buy online; <b>Rentals</b> is for hiring huts, chairs, tables and sound for your event. The <b>cart</b> icon shows what you are about to buy, and the <b>?</b> icon opens this guide.</>,
       <>The <b>search box on the home page</b> has tabs for Flights, Tours, Hotels, Gems and Trade. Fill it in and we take you to the right list or a ready-made enquiry.</>,
       <>On a phone, tap the <b>menu button</b> (three lines, top right) to open the full menu.</>,
       <>Click any item (a tour, a gem, a vehicle ...) to open its page with photos, details, price and an enquiry box.</>,
+      <>Have a question? Click the <b>chat bubble</b> at the bottom right of any page to ask our assistant.</>,
+    ],
+  },
+  {
+    id: "language",
+    title: "Change the language",
+    icon: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18",
+    intro: "The website can be read in English, සිංහල (Sinhala), தமிழ் (Tamil) and Español (Spanish).",
+    steps: [
+      <>Click the <b>globe button</b> 🌐 in the top menu bar (it shows EN, සිං, தமி or ES) and choose your language. On a phone, open the <b>☰ menu</b> - the languages are at the top.</>,
+      <>The menu, the home page, About us, Contact, the whole <Link href="/jobs">Work visa</Link> journey (search, apply form, job pages) and <b>My account → My work visa</b> change to your language straight away.</>,
+      <>Your choice is remembered on this phone or computer. Choose another language at any time.</>,
+    ],
+    tips: [
+      "Names and descriptions our team types (job titles, products, tours) are shown as they were written.",
+      "More pages are being translated step by step; until then they show in English.",
     ],
   },
   {
@@ -103,21 +122,80 @@ const SECTIONS: Section[] = [
   },
   {
     id: "shop",
-    title: "Buy online",
+    title: "Shop online",
     icon: "M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2M10 20h.01M17 20h.01",
     needsAccount: true,
-    intro: "Items with a fixed price (for example gems, parts or trade products) can be bought online.",
+    intro:
+      "The Shop sells single items you can pay for online: our own shop products plus fixed-price gems, vehicle parts, imported goods and Ceylon produce.",
     steps: [
-      <>On the item page, click <b>Add to cart</b>. The cart icon at the top shows how many items you have.</>,
+      <>Open the <Link href="/shop">Shop</Link>. Pick a collection at the top, or search for a product.</>,
+      <>Narrow the list with the filters - category, price range, <b>On sale only</b>, <b>In stock only</b> - and sort by price, newest or biggest discount. Items on sale show the old price crossed out and a badge such as <b>-20%</b>.</>,
+      <>Click <b>Add</b> on a product card, or open the product, choose the quantity and click <b>Add to cart</b> or <b>Buy now</b>.</>,
       <>Open the <Link href="/cart">cart</Link>, check the items and fill in your <b>delivery details</b>.</>,
-      <>Choose how to pay: <b>Credit / Debit card</b> (you pay on the payment provider&apos;s secure page) or <b>Bank transfer</b> (we show you our bank details).</>,
+      <>Choose how to pay: <b>Credit / Debit card</b> (you pay on the payment provider&apos;s secure page) or <b>Bank transfer</b> (we show you our bank details and a reference starting with CHK).</>,
       <>Your order appears under <Link href="/account/orders">My account → Orders &amp; bookings</Link> straight away.</>,
     ],
     tips: [
+      "Card checkouts not paid within 1 hour are released. For a bank transfer, pay within 3 days using the CHK reference - we hold your items until then.",
       "Prices in different currencies are paid separately - the cart shows one total per currency.",
       "Card details are never entered on our website, only on the payment provider's secure page.",
       "Only customer accounts can buy online. If you see a message about a staff account, sign out and sign in with your customer account.",
     ],
+  },
+  {
+    id: "rentals",
+    title: "Hire equipment for your event",
+    icon: "M3 20h18M5 20V10l7-6 7 6v10M9 20v-6h6v6",
+    needsAccount: true,
+    intro:
+      "For weddings, funerals, almsgivings, parties and company events, hire huts and tents, chairs, tables, decoration and sound - delivered and set up by our team.",
+    steps: [
+      <>Open <Link href="/rentals">Rentals</Link> and choose your <b>first day</b> and <b>last day</b> at the top. Each item then shows how many are free on your dates.</>,
+      <>Click <b>Add to my list</b> and set the quantity with <b>-</b> and <b>+</b>. <b>Your rental list</b> on the right shows the estimated price.</>,
+      <>Click <b>Continue to request</b>, choose the type of event, and enter the venue, city, number of guests and whether you need delivery and setup.</>,
+      <>Click <b>Send rental request</b>. You get a reference number and an email.</>,
+      <>Our events team calls you to confirm the items, delivery and the final price. Once confirmed, the items are reserved for you - follow it under <Link href="/account/rentals">My account → Rentals</Link>.</>,
+    ],
+    tips: [
+      "Nothing is paid online for rentals. Delivery and setup are added to the price when we confirm.",
+    ],
+  },
+  {
+    id: "work-visa",
+    title: "Apply for a job abroad (work visa)",
+    icon: "M4 7h16v12H4zM9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M4 12h16",
+    intro:
+      "We recruit for jobs with work visas in the Middle East and around the world. Every job shows the country, salary, benefits and interview details. You do not need an account to apply.",
+    steps: [
+      <>Click <b>Work visa</b> in the top menu to open the <Link href="/jobs">Work visa</Link> page. Point at it (without clicking) to see every country with its jobs and an <b>Apply</b> button.</>,
+      <>Want the page in your own language? Click the <b>globe button</b> (or the language buttons at the top of the Work visa page) and choose සිංහල, தமிழ், Español or English. At the top of the page, choose a <b>Country</b> - the <b>Job</b> list then shows only the jobs in that country. Choose a job (or click one of the job buttons) and the <b>application form opens straight away</b> with that job filled in. You can also look under <b>Jobs by country</b>, or filter the full list by region, country and job type.</>,
+      <>Click a job name to see the full details: salary, contract, work visa type, benefits, requirements, documents to bring and the <b>interview</b> (walk-in, by invitation or online, with date, time and place).</>,
+      <><b>Apply in three steps</b> in the box on the Work visa page: <b>1. Choose your job</b> - tap a country, then tap a job card - the form opens. <b>2. Details &amp; documents</b> - enter your name, mobile / WhatsApp number and email, and add your CV, passport copy and photo if you have them. Click <b>Send my application</b>. <b>3. Sent</b> - you see your reference number, and we email you a copy.</>,
+      <>You can also click <b>Apply</b> on any job card or job page - the same form opens.</>,
+      <>Our recruitment team <b>calls you</b>. We decide together whether an <b>interview</b> is needed. If it is, you get an email with the date, time and place (or a video link).</>,
+      <>When you are <b>selected</b>, and if the country or employer needs it, we book your <b>medical test</b> and send you the date and medical centre. Then we submit your <b>work visa</b>, register you with the SLBFE, and you collect your ticket and <b>fly to your job</b>.</>,
+      <>Follow every step under <Link href="/account/jobs">My account → My work visa</Link>: your progress, the next interview or medical test, the result, and your documents. You can upload more documents there.</>,
+    ],
+    tips: [
+      "Applied without an account? Create one later with the same email address - your application, interviews and documents appear in My work visa automatically.",
+      "Documents are optional when you apply. You can upload them later in My work visa, or bring them to our office.",
+      "Only our recruitment team can see your documents. Passport copies are checked before they are used.",
+      "All interview and medical times are Sri Lanka time (GMT+5:30).",
+      "Changed your mind? Click Withdraw on your application in My work visa (before the visa is processed).",
+    ],
+  },
+  {
+    id: "wholesale",
+    title: "Business quantities: import and export",
+    icon: "M3 7h13v10H3zM16 10h4l1 3v4h-5M7 19a2 2 0 1 0 0-.01M18 19a2 2 0 1 0 0-.01",
+    needsAccount: true,
+    intro: "Buying for a shop or company? Our Import and Export teams supply bulk quantities priced by quotation.",
+    steps: [
+      <>Open <Link href="/import">Import</Link> (goods brought to Sri Lanka) or <Link href="/export">Export</Link> (Ceylon tea, spices, coffee and produce for overseas buyers).</>,
+      <>Each product shows its minimum order, origin and packaging. Click <b>Request bulk quote</b>, or describe any product you need us to source.</>,
+      <>Tell us the quantity, packaging and destination. We reply with a quotation including shipping terms.</>,
+    ],
+    tips: ["To buy just a few items for yourself, use the Shop - every Import and Export page links to it."],
   },
   {
     id: "payments",
@@ -192,15 +270,36 @@ const SECTIONS: Section[] = [
       "Follow Gazellekey on social media with the icons at the bottom of every page, or chat with us using the green WhatsApp button.",
     ],
   },
+  {
+    id: "assistant",
+    title: "Ask our chat assistant",
+    icon: "M4 5h16v11H9l-5 4V5zM8 10h8M8 13h5",
+    intro: "The chat bubble at the bottom right of every page answers questions about our tours, products, rentals and services at any time.",
+    steps: [
+      <>Click the <b>chat bubble</b> and ask in your own words - in English, Sinhala or Tamil - for example <b>Tours to Thailand in December?</b></>,
+      "It looks up real prices and availability and gives you links to the right pages.",
+      <>For quotations, custom tours, visas or changes to an order, it points you to our team - or use <Link href="/contact">Contact</Link> or <Link href="/appointments">Book an appointment</Link>.</>,
+    ],
+    tips: ["The assistant is computer-generated and can make mistakes. Our team always confirms prices and bookings."],
+  },
 ];
 
 const FAQ: [string, ReactNode][] = [
-  ["Do I need an account to look at the website?", "No. Everyone can browse. You only need a free account to send enquiries, book appointments, register for events or buy online."],
+  ["Do I need an account to look at the website?", "No. Everyone can browse. You only need a free account to send enquiries, book appointments, register for events or buy online. Job applications on the Work visa page need no account."],
   ["Does it cost anything to create an account or book an appointment?", "No, both are free and there is no obligation."],
   ["How quickly will you reply?", "We reply to every enquiry, usually within one working day. Appointments are usually confirmed within a few hours."],
   ["Is it safe to pay by card?", "Yes. You enter your card on the payment provider's secure page - card numbers never reach our website."],
   ["My bank transfer still says pending.", "Our finance team confirms bank transfers by hand. This can take up to one working day after the money arrives."],
   ["My uploaded document says “Not accepted”.", "Read the note under it - it says what was wrong. Upload a new, clearer copy."],
+  ["Why does an item say “Price on request”?", "Its price depends on quantity, options or delivery. Send an enquiry from the item page and we reply with a quotation."],
+  ["How long are my items held?", "Card checkout: 1 hour. Bank transfer: 3 days. Rentals: from the moment our team confirms your booking."],
+  ["Do I pay online for rentals?", "No. Send the rental request; our team confirms the final price including delivery and setup, and arranges payment with you."],
+  ["Can I read the website in Sinhala or Tamil?", "Yes. Click the globe button in the top menu (on a phone, open the ☰ menu) and choose සිංහල, தமிழ், Español or English. The work visa pages, menu, home, About and Contact pages change at once; more pages are being translated."],
+  ["Do I need an account to apply for a job abroad?", <>No. Choose a job on the <Link href="/jobs">Work visa</Link> page and send the form. Create an account later with the same email to follow your application in <b>My work visa</b>.</>],
+  ["Will I always have an interview or a medical test?", "Not always. Our team decides for each job and candidate. If one is needed, you get an email with the date, time and place, and it shows in My work visa."],
+  ["Where do I see my interview date?", <>In the email we send you, and under <Link href="/account/jobs">My account → My work visa</Link>, where your next interview or medical test is highlighted.</>],
+  ["Can I change or cancel an order or rental?", <>Contact us as early as possible. Appointments you can cancel yourself under <Link href="/account/appointments">My account → Appointments</Link>.</>],
+  ["Something went wrong with our service - who can I contact?", <>See <b>Need to reach our management?</b> on the <Link href="/contact#management">Contact</Link> page: contact the manager of that division (email or phone) or write to our directors by email.</>],
   ["I cannot sign in.", <>Check your email and password, or use <b>Continue with Google</b> if you signed up with Google. Still stuck? <Link href="/contact">Contact us</Link>.</>],
 ];
 

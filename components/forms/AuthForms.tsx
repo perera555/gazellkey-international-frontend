@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { apiRequest } from "@/lib/api-client";
 import PasswordInput from "@/components/forms/PasswordInput";
 
@@ -65,6 +66,7 @@ export function LoginForm({ next, adminUrl }: { next?: string; adminUrl: string 
       window.location.href = adminUrl;
       return;
     }
+    toast.success("Welcome back! You are signed in.");
     router.replace(safeNext(next));
     router.refresh();
   }
@@ -136,6 +138,7 @@ export function RegisterForm({ next }: { next?: string }) {
       router.push("/login");
       return;
     }
+    toast.success("Your account is ready. Welcome to Gazellekey!");
     router.replace(safeNext(next));
     router.refresh();
   }
@@ -199,6 +202,7 @@ export function LogoutButton({
       className={className}
       onClick={async () => {
         await apiRequest("POST", "/api/auth/logout");
+        toast.success("You are signed out.");
         router.push(redirectTo);
         router.refresh();
       }}
@@ -234,6 +238,7 @@ export function ChangePasswordForm() {
     });
     if (result.ok) {
       formElement.reset();
+      toast.success("Password changed.");
     }
   }
 

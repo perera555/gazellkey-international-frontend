@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 import { apiRequest } from "@/lib/api-client";
 import { DIVISION_LIST } from "@/lib/divisions";
 import {
@@ -140,6 +141,7 @@ export default function AppointmentForm(props: Props) {
     setSending(false);
     if (result.ok) {
       setBooked({ reference: result.data.reference ?? "", startAt: startAt });
+      toast.success("Appointment requested - we will confirm it by email.");
     } else {
       setError(result.data.message ?? "Could not book the appointment.");
       if (result.status == 409) {

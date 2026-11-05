@@ -206,7 +206,7 @@ export default async function VehiclesPage({ searchParams }: PageProps<"/vehicle
       </section>
 
       {/* Browse by make & model */}
-      <section id="models" className="scroll-mt-28 border-t border-slate-200 bg-white py-14">
+      <section id="models" className="scroll-mt-28 border-t border-ivory-200 bg-ivory-50 py-14">
         <div className="container-page">
           <p className="eyebrow">Model list</p>
           <h2 className="heading-display mt-2 text-3xl">

@@ -12,6 +12,10 @@
   --color-gold-500: #d4a64a;
   --color-gold-400: #e5c07b;
   --color-gold-100: #f7ecd5;
+  /* warm light page colours (instead of plain white) */
+  --color-ivory-50: #fdfaf4;
+  --color-ivory-100: #f6f0e4;
+  --color-ivory-200: #ece3d1;
 
   --color-travel: #1e88e5;
   --color-events: #f26b21;
@@ -56,8 +60,14 @@ html {
   }
 }
 
+/* nothing may push the page wider than the screen (clip keeps sticky headers working) */
+html,
 body {
-  background: #f7f8fb;
+  overflow-x: clip;
+}
+
+body {
+  background: var(--color-ivory-100);
   color: #1a2236;
   text-rendering: optimizeLegibility;
   font-feature-settings: "ss01", "cv11";
@@ -94,9 +104,10 @@ p {
 @utility container-page {
   @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
 }
-/* Wider frame for the header bars, so the logo and menu have room */
+/* Full-width frame for the header bar: the logo in the left corner, the
+   buttons in the right corner, with an even margin on both sides */
 @utility container-wide {
-  @apply mx-auto w-full max-w-[96rem] px-4 sm:px-6 lg:px-10;
+  @apply w-full px-4 sm:px-6 lg:px-8 2xl:px-10;
 }
 
 /* Buttons: pill shaped, lift slightly on hover */
@@ -143,9 +154,10 @@ p {
   @apply block w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-[0_1px_2px_rgb(15_23_42/0.04)] transition placeholder:text-slate-400 hover:border-slate-300 focus:border-gold-500 focus:ring-4 focus:ring-gold-500/15 focus:outline-none;
 }
 
-/* Clean white panels with a hairline border and a soft, layered shadow */
+/* Clean white panels with a warm hairline border and a soft, layered shadow
+   (they stand out a little on the ivory page) */
 @utility card {
-  @apply rounded-3xl border border-slate-200/80 bg-white transition duration-300;
+  @apply rounded-3xl border border-ivory-200 bg-white transition duration-300;
   box-shadow:
     0 1px 2px rgb(15 23 42 / 0.04),
     0 8px 24px -16px rgb(11 21 48 / 0.12);
@@ -273,6 +285,22 @@ p {
   from {
     opacity: 0;
     transform: translateY(-6px);
+  }
+}
+
+/* Steps and cards rise into place one after another (animation-delay per item) */
+.rise {
+  animation: rise 0.45s ease-out both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
   }
 }
 

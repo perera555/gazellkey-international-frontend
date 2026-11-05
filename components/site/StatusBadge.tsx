@@ -15,6 +15,17 @@ const TONES: Record<string, string> = {
   QUOTED: "bg-violet-100 text-violet-800",
   SENT: "bg-violet-100 text-violet-800",
   REVISED: "bg-slate-100 text-slate-700",
+  // overseas job applications and interviews
+  APPLIED: "bg-blue-100 text-blue-800",
+  SHORTLISTED: "bg-violet-100 text-violet-800",
+  INTERVIEWING: "bg-indigo-100 text-indigo-800",
+  SCHEDULED: "bg-indigo-100 text-indigo-800",
+  SELECTED: "bg-green-100 text-green-800",
+  PASSED: "bg-green-100 text-green-800",
+  VISA_PROCESSING: "bg-amber-100 text-amber-800",
+  MEDICAL: "bg-amber-100 text-amber-800",
+  DEPLOYED: "bg-green-100 text-green-800",
+  WITHDRAWN: "bg-slate-200 text-slate-700",
   // good outcome
   CONVERTED: "bg-green-100 text-green-800",
   ACCEPTED: "bg-green-100 text-green-800",
@@ -24,6 +35,7 @@ const TONES: Record<string, string> = {
   ISSUED: "bg-green-100 text-green-800",
   POLICY_ISSUED: "bg-green-100 text-green-800",
   DELIVERED: "bg-green-100 text-green-800",
+  RETURNED: "bg-green-100 text-green-800",
   // bad outcome
   CLOSED_LOST: "bg-slate-200 text-slate-700",
   CANCELLED: "bg-slate-200 text-slate-700",
@@ -40,10 +52,10 @@ const TONES: Record<string, string> = {
   SOLD: "bg-slate-200 text-slate-700",
 };
 
-export default function StatusBadge({ value }: { value: string }) {
+export default function StatusBadge({ value, label }: { value: string; label?: string }) {
   return (
     <span className={`badge ${TONES[value] ?? "bg-slate-100 text-slate-700"}`}>
-      {humanize(value)}
+      {label ?? humanize(value)}
     </span>
   );
 }
