@@ -52,6 +52,7 @@ export default async function Header() {
     { href: "/about", label: w.about },
   ];
   const after = [
+    { href: "/fertilizer", label: w.fertilizer },
     { href: "/shop", label: w.shop },
     { href: "/rentals", label: w.rentals },
     { href: "/gallery", label: w.gallery, wideOnly: true },

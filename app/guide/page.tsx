@@ -143,6 +143,19 @@ const SECTIONS: Section[] = [
     ],
   },
   {
+    id: "fertilizer",
+    title: "Buy fertilizer",
+    icon: "M12 21c-4-3-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-3 8-7 11zM12 10v6M9 13h6",
+    needsAccount: true,
+    intro: "We import fertilizer and sell it by the kilogram (LKR 150 per kg).",
+    steps: [
+      <>Click <b>Fertilizer</b> in the top menu (on a phone, open the ☰ menu) to open the <Link href="/fertilizer">Fertilizer</Link> page.</>,
+      <>Click <b>Add</b>, set how many kilograms you need in the cart, then pay by <b>card</b> or <b>bank transfer</b> - the same as the Shop.</>,
+      <>Our team contacts you to arrange delivery or collection. Follow your order under <Link href="/account/orders">My account → Orders &amp; bookings</Link>.</>,
+      <>Buying a large quantity for an estate, farm or shop? Use <b>Bulk order / contact us</b> on the page to send an enquiry, or call us.</>,
+    ],
+  },
+  {
     id: "rentals",
     title: "Hire equipment for your event",
     icon: "M3 20h18M5 20V10l7-6 7 6v10M9 20v-6h6v6",

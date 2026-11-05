@@ -7,6 +7,7 @@ export type NavWords = {
   about: string;
   divisions: string;
   workVisa: string;
+  fertilizer: string;
   shop: string;
   rentals: string;
   gallery: string;
@@ -40,6 +41,7 @@ export const NAV_WORDS: Record<Lang, NavWords> = {
     about: "About Us",
     divisions: "Divisions",
     workVisa: "Work visa",
+    fertilizer: "Fertilizer",
     shop: "Shop",
     rentals: "Rentals",
     gallery: "Gallery",
@@ -71,6 +73,7 @@ export const NAV_WORDS: Record<Lang, NavWords> = {
     about: "අප ගැන",
     divisions: "අංශ",
     workVisa: "රැකියා වීසා",
+    fertilizer: "පොහොර",
     shop: "සාප්පුව",
     rentals: "කුලියට",
     gallery: "ගැලරිය",
@@ -102,6 +105,7 @@ export const NAV_WORDS: Record<Lang, NavWords> = {
     about: "எங்களைப் பற்றி",
     divisions: "பிரிவுகள்",
     workVisa: "வேலை விசா",
+    fertilizer: "உரம்",
     shop: "கடை",
     rentals: "வாடகை",
     gallery: "படத்தொகுப்பு",
@@ -133,6 +137,7 @@ export const NAV_WORDS: Record<Lang, NavWords> = {
     about: "Nosotros",
     divisions: "Divisiones",
     workVisa: "Visa de trabajo",
+    fertilizer: "Fertilizantes",
     shop: "Tienda",
     rentals: "Alquiler",
     gallery: "Galería",

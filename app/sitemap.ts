@@ -13,6 +13,7 @@ const PAGES: [path: string, change: "daily" | "weekly" | "monthly", priority: nu
   ["/shop", "daily", 0.9],
   ["/rentals", "weekly", 0.9],
   ["/jobs", "daily", 0.9],
+  ["/fertilizer", "weekly", 0.9],
   ["/import", "weekly", 0.8],
   ["/export", "weekly", 0.8],
   ["/gems", "weekly", 0.8],
