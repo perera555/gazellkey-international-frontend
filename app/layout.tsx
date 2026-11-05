@@ -42,6 +42,9 @@ export const metadata: Metadata = {
     images: [HOME_HERO_IMAGE],
   },
   applicationName: "Gazellekey International",
+  // iPhones (and the WhatsApp browser) turn phone-number-like text into links,
+  // which changes the page before React starts - keep it as written
+  formatDetection: { telephone: false, email: false, address: false },
   keywords: [
     "Gazellekey International",
     "Gazellekey",
