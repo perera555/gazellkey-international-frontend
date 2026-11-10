@@ -11,6 +11,7 @@ export type TeamMember = {
   roles: ("DIRECTOR" | "SHAREHOLDER" | "MANAGER" | "TEAM")[];
   position: string;
   division: string | null;
+  department?: string | null; // e.g. IT Department, Travel Services
   email: string | null;
   phone: string | null;
   bio: string | null;
@@ -41,7 +42,7 @@ export function PersonCard({ person, showPhone, roleNames, divisionName, large =
           <p className="text-sm text-slate-600">{person.position}</p>
           <p className="text-xs font-semibold tracking-wide text-gold-600 uppercase">
             {roles}
-            {person.division ? ` · ${divisionName(person.division)}` : ""}
+            {person.department ? ` · ${person.department}` : person.division ? ` · ${divisionName(person.division)}` : ""}
           </p>
         </div>
       </div>
