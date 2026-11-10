@@ -57,6 +57,7 @@ export default async function Header() {
     { href: "/rentals", label: w.rentals },
     { href: "/gallery", label: w.gallery, wideOnly: true },
     { href: "/reviews", label: w.reviews, wideOnly: true },
+    { href: "/team", label: w.team, wideOnly: true },
     { href: "/contact", label: w.contact },
   ];
   const divisions: NavDivision[] = DIVISION_LIST.map((division) => ({

@@ -86,6 +86,14 @@ type Words = {
     board: string;
     emailOnly: string;
     roles: Record<string, string>;
+    // Our team page (/team)
+    eyebrowTeam: string;
+    titleTeam: string;
+    textTeam: string;
+    directors: string;
+    shareholders: string;
+    team: string;
+    emptyTeam: string;
   };
 };
 
@@ -202,7 +210,14 @@ const en: Words = {
     managers: "Managers",
     board: "Directors & shareholders",
     emailOnly: "Directors are contacted by email only.",
-    roles: { DIRECTOR: "Director", SHAREHOLDER: "Shareholder", MANAGER: "Manager" },
+    roles: { DIRECTOR: "Director", SHAREHOLDER: "Shareholder", MANAGER: "Manager", TEAM: "Team" },
+    eyebrowTeam: "Our people",
+    titleTeam: "Meet our team",
+    textTeam: "The directors, shareholders, managers and team members of Gazellekey International - and how to reach them.",
+    directors: "Directors",
+    shareholders: "Shareholders",
+    team: "Our team",
+    emptyTeam: "Our team will be introduced here soon.",
   },
 };
 
@@ -319,7 +334,14 @@ const si: Words = {
     managers: "කළමනාකරුවන්",
     board: "අධ්‍යක්ෂවරුන් සහ කොටස්කරුවන්",
     emailOnly: "අධ්‍යක්ෂවරුන් සම්බන්ධ කරගත හැක්කේ ඊමේල් මගින් පමණි.",
-    roles: { DIRECTOR: "අධ්‍යක්ෂ", SHAREHOLDER: "කොටස්කරු", MANAGER: "කළමනාකරු" },
+    roles: { DIRECTOR: "අධ්‍යක්ෂ", SHAREHOLDER: "කොටස්කරු", MANAGER: "කළමනාකරු", TEAM: "කණ්ඩායම" },
+    eyebrowTeam: "අපේ පිරිස",
+    titleTeam: "අපගේ කණ්ඩායම හමුවන්න",
+    textTeam: "Gazellekey International හි අධ්‍යක්ෂවරුන්, කොටස්කරුවන්, කළමනාකරුවන් සහ කණ්ඩායම් සාමාජිකයින් - සහ ඔවුන් සම්බන්ධ කරගන්නා ආකාරය.",
+    directors: "අධ්‍යක්ෂවරුන්",
+    shareholders: "කොටස්කරුවන්",
+    team: "අපගේ කණ්ඩායම",
+    emptyTeam: "අපගේ කණ්ඩායම ඉක්මනින් මෙහි හඳුන්වා දෙනු ඇත.",
   },
 };
 
@@ -436,7 +458,14 @@ const ta: Words = {
     managers: "மேலாளர்கள்",
     board: "இயக்குநர்கள் & பங்குதாரர்கள்",
     emailOnly: "இயக்குநர்களை மின்னஞ்சல் மூலம் மட்டுமே தொடர்பு கொள்ளலாம்.",
-    roles: { DIRECTOR: "இயக்குநர்", SHAREHOLDER: "பங்குதாரர்", MANAGER: "மேலாளர்" },
+    roles: { DIRECTOR: "இயக்குநர்", SHAREHOLDER: "பங்குதாரர்", MANAGER: "மேலாளர்", TEAM: "குழு" },
+    eyebrowTeam: "எங்கள் மக்கள்",
+    titleTeam: "எங்கள் குழுவைச் சந்தியுங்கள்",
+    textTeam: "Gazellekey International இன் இயக்குநர்கள், பங்குதாரர்கள், மேலாளர்கள் மற்றும் குழு உறுப்பினர்கள் - அவர்களை எவ்வாறு தொடர்பு கொள்வது.",
+    directors: "இயக்குநர்கள்",
+    shareholders: "பங்குதாரர்கள்",
+    team: "எங்கள் குழு",
+    emptyTeam: "எங்கள் குழு விரைவில் இங்கே அறிமுகப்படுத்தப்படும்.",
   },
 };
 
@@ -553,7 +582,14 @@ const es: Words = {
     managers: "Gerentes",
     board: "Directores y accionistas",
     emailOnly: "A los directores se les contacta solo por correo electrónico.",
-    roles: { DIRECTOR: "Director", SHAREHOLDER: "Accionista", MANAGER: "Gerente" },
+    roles: { DIRECTOR: "Director", SHAREHOLDER: "Accionista", MANAGER: "Gerente", TEAM: "Equipo" },
+    eyebrowTeam: "Nuestra gente",
+    titleTeam: "Conoce a nuestro equipo",
+    textTeam: "Los directores, accionistas, gerentes y miembros del equipo de Gazellekey International, y cómo contactarlos.",
+    directors: "Directores",
+    shareholders: "Accionistas",
+    team: "Nuestro equipo",
+    emptyTeam: "Pronto presentaremos aquí a nuestro equipo.",
   },
 };
 

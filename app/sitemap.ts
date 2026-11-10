@@ -24,6 +24,7 @@ const PAGES: [path: string, change: "daily" | "weekly" | "monthly", priority: nu
   ["/gallery", "weekly", 0.6],
   ["/reviews", "weekly", 0.6],
   ["/about", "monthly", 0.6],
+  ["/team", "monthly", 0.5],
   ["/contact", "monthly", 0.6],
   ["/guide", "monthly", 0.4],
 ];

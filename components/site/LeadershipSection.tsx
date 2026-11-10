@@ -3,12 +3,12 @@ import { humanize } from "@/lib/format";
 import { getDictionary } from "@/lib/i18n-server";
 import { PAGE_WORDS } from "@/lib/i18n-pages";
 
-// A person from /api/team in the public view: directors and shareholders
-// never have a phone number here (the API removes it), managers may.
+// A person from /api/team in the public view: directors, shareholders and
+// team members never have a phone number here (the API removes it), managers may.
 export type TeamMember = {
   id: string;
   name: string;
-  roles: ("DIRECTOR" | "SHAREHOLDER" | "MANAGER")[];
+  roles: ("DIRECTOR" | "SHAREHOLDER" | "MANAGER" | "TEAM")[];
   position: string;
   division: string | null;
   email: string | null;
@@ -21,16 +21,18 @@ function initials(name: string) {
   return name.split(/\s+/).filter(Boolean).map((word) => word[0]).join("").slice(0, 2).toUpperCase();
 }
 
-function PersonCard({ person, showPhone, roleNames, divisionName }: { person: TeamMember; showPhone: boolean; roleNames: Record<string, string>; divisionName: (key: string) => string }) {
+// large: bigger photo, for the Our team page
+export function PersonCard({ person, showPhone, roleNames, divisionName, large = false }: { person: TeamMember; showPhone: boolean; roleNames: Record<string, string>; divisionName: (key: string) => string; large?: boolean }) {
   const roles = person.roles.map((role) => roleNames[role] ?? humanize(role)).join(" · ");
+  const photoSize = large ? "h-24 w-24 text-3xl" : "h-16 w-16 text-xl";
   return (
     <li className="card flex h-full flex-col p-6 transition hover:-translate-y-0.5 hover:shadow-lg">
       <div className="flex items-center gap-4">
         {person.photo ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={person.photo} alt={person.name} className="h-16 w-16 shrink-0 rounded-2xl object-cover" />
+          <img src={person.photo} alt={person.name} className={`${photoSize} shrink-0 rounded-2xl object-cover`} />
         ) : (
-          <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-navy-950 text-xl font-bold text-gold-400" aria-hidden="true">
+          <span className={`grid ${photoSize} shrink-0 place-items-center rounded-2xl bg-navy-950 font-bold text-gold-400`} aria-hidden="true">
             {initials(person.name)}
           </span>
         )}

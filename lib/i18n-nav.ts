@@ -12,6 +12,7 @@ export type NavWords = {
   rentals: string;
   gallery: string;
   reviews: string;
+  team: string;
   contact: string;
   signIn: string;
   createAccount: string;
@@ -46,6 +47,7 @@ export const NAV_WORDS: Record<Lang, NavWords> = {
     rentals: "Rentals",
     gallery: "Gallery",
     reviews: "Reviews",
+    team: "Our team",
     contact: "Contact",
     signIn: "Sign in",
     createAccount: "Create account",
@@ -78,6 +80,7 @@ export const NAV_WORDS: Record<Lang, NavWords> = {
     rentals: "කුලියට",
     gallery: "ගැලරිය",
     reviews: "සමාලෝචන",
+    team: "අපගේ කණ්ඩායම",
     contact: "සම්බන්ධ වන්න",
     signIn: "ඇතුල් වන්න",
     createAccount: "ගිණුමක් සාදන්න",
@@ -110,6 +113,7 @@ export const NAV_WORDS: Record<Lang, NavWords> = {
     rentals: "வாடகை",
     gallery: "படத்தொகுப்பு",
     reviews: "மதிப்புரைகள்",
+    team: "எங்கள் குழு",
     contact: "தொடர்பு",
     signIn: "உள்நுழைக",
     createAccount: "கணக்கை உருவாக்கவும்",
@@ -142,6 +146,7 @@ export const NAV_WORDS: Record<Lang, NavWords> = {
     rentals: "Alquiler",
     gallery: "Galería",
     reviews: "Opiniones",
+    team: "Nuestro equipo",
     contact: "Contacto",
     signIn: "Iniciar sesión",
     createAccount: "Crear cuenta",
