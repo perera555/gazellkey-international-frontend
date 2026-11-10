@@ -15,23 +15,23 @@ export const CARD_NAMES: Record<MembershipTier, string> = {
 // The card face of each tier
 const TIER_STYLE: Record<MembershipTier, { card: string; accent: string }> = {
   BLUE: {
-    card: "bg-gradient-to-br from-sky-600 via-blue-700 to-navy-950 ring-1 ring-sky-300/40",
+    card: "bg-linear-to-br from-sky-600 via-blue-700 to-navy-950 ring-1 ring-sky-300/40",
     accent: "text-sky-200",
   },
   BRONZE: {
-    card: "bg-gradient-to-br from-amber-700 via-orange-900 to-stone-900 ring-1 ring-amber-500/50",
+    card: "bg-linear-to-br from-amber-700 via-orange-900 to-stone-900 ring-1 ring-amber-500/50",
     accent: "text-amber-200",
   },
   SILVER: {
-    card: "bg-gradient-to-br from-slate-400 via-slate-600 to-slate-800 ring-1 ring-slate-200/60",
+    card: "bg-linear-to-br from-slate-400 via-slate-600 to-slate-800 ring-1 ring-slate-200/60",
     accent: "text-slate-100",
   },
   GOLD: {
-    card: "bg-gradient-to-br from-gold-500 via-amber-700 to-navy-950 ring-1 ring-gold-400/70",
+    card: "bg-linear-to-br from-gold-500 via-amber-700 to-navy-950 ring-1 ring-gold-400/70",
     accent: "text-gold-100",
   },
   PLATINUM: {
-    card: "bg-gradient-to-br from-zinc-300 via-zinc-600 to-black ring-2 ring-zinc-200/80",
+    card: "bg-linear-to-br from-zinc-300 via-zinc-600 to-black ring-2 ring-zinc-200/80",
     accent: "text-white",
   },
 };

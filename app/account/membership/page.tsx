@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AccountHeading } from "@/components/account/AccountTable";
-import JoinMembershipButton from "@/components/account/JoinMembershipButton";
 import MembershipCard, { CARD_NAMES, MembershipTier } from "@/components/account/MembershipCard";
 import ErrorNote from "@/components/site/ErrorNote";
 import { apiGetMine } from "@/lib/api";
@@ -53,13 +52,8 @@ export default async function MyMembershipPage({ searchParams }: PageProps<"/acc
     return (
       <>
         <AccountHeading title="My membership" text="Your Gazellekey membership card and points." />
-        <div className="card px-6 py-12 text-center">
-          <h2 className="heading-display text-2xl">Join Gazellekey membership</h2>
-          <p className="mx-auto mt-3 max-w-md text-slate-600">
-            It is free. You get a membership card in your name and earn points every time you pay for our services - tours,
-            events, rentals, the shop and more.
-          </p>
-          <JoinMembershipButton />
+        <div className="card px-6 py-12 text-center text-slate-600">
+          Membership cards are for customer accounts. Staff accounts do not have one.
         </div>
       </>
     );

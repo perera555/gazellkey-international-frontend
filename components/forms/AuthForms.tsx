@@ -116,14 +116,12 @@ export function RegisterForm({ next }: { next?: string }) {
     }
     setSending(true);
     const phone = String(form.get("phone") ?? "").trim();
-    const joinMembership = form.get("joinMembership") == "on";
     const result = await apiRequest("POST", "/api/auth/register", {
       firstName: form.get("firstName"),
       lastName: form.get("lastName"),
       email: form.get("email"),
       phone: phone || undefined,
       password: form.get("password"),
-      joinMembership: joinMembership,
     });
     if (!result.ok) {
       setSending(false);
@@ -141,8 +139,9 @@ export function RegisterForm({ next }: { next?: string }) {
       return;
     }
     toast.success("Your account is ready. Welcome to Gazellekey!");
-    // new members see their membership card first
-    router.replace(joinMembership ? "/account/membership?welcome=1" : safeNext(next));
+    // every new account gets a Blue membership card: show it, unless the
+    // customer signed up in the middle of something (a booking, an enquiry ...)
+    router.replace(next ? safeNext(next) : "/account/membership?welcome=1");
     router.refresh();
   }
 
@@ -175,13 +174,15 @@ export function RegisterForm({ next }: { next?: string }) {
         <label className="label" htmlFor="confirm">Confirm password</label>
         <PasswordInput id="confirm" name="confirm" required minLength={8} maxLength={72} autoComplete="new-password" />
       </div>
-      <label htmlFor="joinMembership" className="flex cursor-pointer items-start gap-3 rounded-xl border border-gold-400/60 bg-gold-100/50 p-4 sm:col-span-2">
-        <input id="joinMembership" name="joinMembership" type="checkbox" defaultChecked className="mt-0.5 h-5 w-5 shrink-0 accent-navy-900" />
-        <span className="text-sm">
-          <span className="block font-semibold text-navy-950">Become a Gazellekey member (free)</span>
-          <span className="text-slate-600">Get your membership card in your name and earn points every time you use our services.</span>
+      <p className="flex items-start gap-3 rounded-xl border border-gold-400/60 bg-gold-100/50 p-4 text-sm sm:col-span-2">
+        <span className="mt-0.5 h-5 w-8 shrink-0 rounded bg-linear-to-br from-sky-600 to-navy-950 ring-1 ring-sky-300/40" aria-hidden="true" />
+        <span>
+          <span className="block font-semibold text-navy-950">Free Gazellekey membership card</span>
+          <span className="text-slate-600">
+            Every account gets a Blue Card in your name. Earn points each time you use our services and move up to Bronze, Silver, Gold and Platinum.
+          </span>
         </span>
-      </label>
+      </p>
       {error ? <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 sm:col-span-2" role="alert">{error}</p> : null}
       <button type="submit" disabled={sending} className="btn-navy w-full sm:col-span-2">
         {sending ? "Creating account..." : "Create account"}
